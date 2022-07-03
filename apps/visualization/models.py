@@ -10,6 +10,9 @@ class CityModel(BaseModel):
     subdomain = models.URLField("子域名链接", max_length=128, help_text="子域名链接")
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
+    def __str__(self):
+        return f"<id: {self.id} city_name: {self.city_name}>"
+
     class Meta:
         db_table = "city"
         ordering = ["id"]
@@ -30,6 +33,9 @@ class HouseInfoModel(BaseModel):
 
     city = models.ForeignKey(CityModel, null=True, on_delete=models.SET_NULL)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f"[{self.house_code}]{self.estate}——{self.title}>"
 
     class Meta:
         db_table = "house_info"
