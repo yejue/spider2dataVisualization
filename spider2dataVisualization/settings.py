@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.spider',   # 爬虫 APP
     'apps.visualization',  # 可视化 APP
+    'apps.apiv1',  # 可视化 APP
 ]
 
 MIDDLEWARE = [
