@@ -37,8 +37,13 @@ class LianJiaSecondHandSpiderView(View):
     def get(self, request):
         spider = LianjiaSecondHandSpider("深圳")
         res = spider.run()
-
+        if not res:
+            return json_response("请进行人机认证")
         for item in res:
-            v_models.HouseInfoModel.objects.get_or_create(**item)
+            house_obj = v_models.HouseInfoModel.objects.filter(house_code=item["house_code"])
+            if house_obj:
+                house_obj.update(**item)
+                continue
+            v_models.HouseInfoModel.objects.create(**item)
 
         return json_response()

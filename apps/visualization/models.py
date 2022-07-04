@@ -28,8 +28,8 @@ class HouseInfoModel(BaseModel):
     location = models.CharField("位置", max_length=128, help_text="位置")
     house_type = models.CharField("户型", max_length=32, help_text="户型")
     house_area = models.FloatField("房子面积", help_text="房子面积")
-    total_price = models.FloatField("总价")
-    unit_price = models.FloatField("单价")
+    total_price = models.FloatField("总价", help_text="总价")
+    unit_price = models.FloatField("单价", help_text="每单位价格")
 
     city = models.ForeignKey(CityModel, null=True, on_delete=models.SET_NULL)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

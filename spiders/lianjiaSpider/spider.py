@@ -48,7 +48,7 @@ class LianjiaSecondHandSpider:
             house_area = float(re.findall(r'\d+\.\d+|\d+', house_info[1])[0])  # 房子面积
 
             total_price = float(item.select_one(".totalPrice.totalPrice2 span").text.strip())  # 房子总价
-            unit_price = float(item.select_one(".unitPrice").get("data-price"))  # 每单位价格
+            unit_price = float(re.findall(r"\d+", item.select_one(".unitPrice span").text.replace(",", ""))[0])  # 每单位价格
 
             temp = {
                 "title": title,
