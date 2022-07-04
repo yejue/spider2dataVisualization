@@ -40,6 +40,11 @@ class LianJiaSecondHandSpiderView(View):
         if not res:
             return json_response("请进行人机认证")
         for item in res:
+            user = User.objects.get(username="spider")
+            city = v_models.CityModel.objects.get(city_name=spider.city_name)
+            item["created_by"] = user  # 设置用户外键
+            item["city"] = city  # 设置城市外键
+
             house_obj = v_models.HouseInfoModel.objects.filter(house_code=item["house_code"])
             if house_obj:
                 house_obj.update(**item)
