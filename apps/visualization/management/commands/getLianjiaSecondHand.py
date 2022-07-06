@@ -4,7 +4,7 @@ import logging
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from apps.visualization.models import HouseInfoModel, CityModel
-from spiders import LianjiaSecondHandSpider
+from spiders import LianjiaSecondHandASyncSpider
 
 spider_logger = logging.getLogger("spider")
 
@@ -19,7 +19,7 @@ class Command(BaseCommand):
         """
         argv = sys.argv
         city_name = argv[2]
-        spider = LianjiaSecondHandSpider(city_name)
+        spider = LianjiaSecondHandASyncSpider(city_name)
         res = spider.run()
 
         if not res:

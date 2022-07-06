@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 from . import constants
 
 
-class LianjiaSecondHandSpider:
-    """链家二手房爬虫"""
+class LianjiaSecondHandASyncSpider:
+    """链家二手房异步爬虫"""
 
     def __init__(self, city_name):
         self.subdomain = constants.SUB_DOMAIN_DICT  # 链家城市子域名链接字典
