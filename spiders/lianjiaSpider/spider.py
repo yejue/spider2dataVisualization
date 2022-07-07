@@ -7,6 +7,38 @@ from bs4 import BeautifulSoup
 from . import constants
 
 
+class LianjiaSecondHandSpider:
+    """链家二手房爬虫"""
+    def __init__(self, city_name):
+        self.city_name = city_name
+        self.headers = constants.HEADERS
+        self.subdomain = constants.SUB_DOMAIN_DICT[self.city_name]  # 获取对应城市的子域名
+
+    def get_all_urls_by_location(self):
+        """获取通过位置参数筛选的所有位置的二手房的初始页面 URL"""
+        start_url = f"{self.subdomain}ershoufang/"
+        req = requests.get(start_url, headers=self.headers)
+        soup = BeautifulSoup(req.text, "html.parser")
+        tag_list = soup.select("div[data-role='ershoufang'] div a")  # 筛选出辖区 a 标签列表
+        district_urls = []  # 辖区 URL 列表
+
+        for item in tag_list:  # 遍历取出用辖区作为筛选条件的 URL 列表，添加到辖区 URL列表
+            district_urls.append(f"{self.subdomain}{item.get('href')}")
+
+        location_urls = []  # 使用位置筛选的 URL 列表，即链家位置筛选的最小单位筛选
+
+        for d_url in district_urls:  # 遍历所有辖区初始链接，取得最小单位的开始的初始链接
+            req = requests.get(d_url, headers=self.headers)
+            soup = BeautifulSoup(req.text, "html.parser")
+            tag = soup.select("div[data-role='ershoufang'] div")[1]
+            tag_list = tag.select("a")
+
+            for item in tag_list:
+                location_urls.append(f"{self.subdomain}{item.get('href')}")
+
+        return location_urls
+
+
 class LianjiaSecondHandASyncSpider:
     """链家二手房异步爬虫"""
 
