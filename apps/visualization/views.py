@@ -31,6 +31,35 @@ class LianJiaCitySpiderView(View):
         return json_response()
 
 
+class LianJiaDistrictSpiderView(View):
+    """链家辖区入库视图"""
+    def get(self, request):
+        city_name = request.GET.get("city_name", "深圳")
+        city_obj = v_models.CityModel.objects.get(city_name=city_name)
+        subdomain = city_obj.subdomain
+        start_url = f"{subdomain}ershoufang/"
+
+        req = requests.get(start_url, headers=constants.HEADERS)
+        soup = BeautifulSoup(req.text, "html.parser")
+        tag_list = soup.select("div[data-role='ershoufang'] div a")  # 筛选出辖区 a 标签列表
+
+        for tag in tag_list:  # 遍历所有辖区标签，访问并取得子级位置信息和对应 URL 入库
+            district_model = v_models.DistrictModel(district_name=tag.text, city=city_obj)
+            district_model.save()  # 创建一个辖区
+
+            temp_url = tag.get("href")  # 获取该次遍历的辖区 URL
+            req = requests.get(f"{start_url}{temp_url}", headers=constants.HEADERS)
+            soup = BeautifulSoup(req.text, "html.parser")
+            tag = soup.select("div[data-role='ershoufang'] div")[1]  # 筛选出子级列表的标签列表
+            tag_location_list = tag.select("a")
+
+            for item in tag_location_list:  # 遍历入库子级区域
+                location_model = v_models.DistrictModel(district_name=item.text, city=city_obj, parent=district_model)
+                location_model.save()
+
+        return json_response()
+
+
 class LianJiaSecondHandSpiderView(View):
     """链家城市二手房信息入库视图"""
 
