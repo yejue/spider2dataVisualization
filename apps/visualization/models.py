@@ -67,7 +67,6 @@ class HouseInfoModel(BaseModel):
     total_price = models.FloatField("总价", help_text="总价")
     unit_price = models.FloatField("单价", help_text="每单位价格")
 
-    district = models.ForeignKey(DistrictModel, null=True, on_delete=models.SET_NULL)
     estate = models.ForeignKey(EstateModel, null=True, on_delete=models.SET_NULL)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
