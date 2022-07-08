@@ -25,7 +25,7 @@ class DistrictModel(BaseModel):
     city = models.ForeignKey(CityModel, null=True, on_delete=models.SET_NULL)
     parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
 
-    district_name = models.CharField("辖区名", max_length=128, help_text="辖区或者是某区域")
+    district_name = models.CharField("辖区名", max_length=128, help_text="辖区或者是某区域", unique=True)
     lon = models.FloatField("经度", null=True, help_text="经度")
     lat = models.FloatField("纬度", null=True, help_text="纬度")
 
@@ -45,9 +45,10 @@ class EstateModel(BaseModel):
     estate_name = models.CharField("小区名", max_length=128, help_text="小区名")
     lon = models.FloatField("经度", null=True, help_text="经度")
     lat = models.FloatField("纬度", null=True, help_text="纬度")
+    house_code = models.CharField("房子编号", max_length=32, unique=True, help_text="房子编号", null=True)
 
     def __str__(self):
-        return f"<id: {self.id} district_id: {self.estate_name}>"
+        return f"<id: {self.id} district: {self.estate_name}>"
 
     class Meta:
         db_table = "estate"
