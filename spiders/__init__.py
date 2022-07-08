@@ -1,1 +1,1 @@
-from .lianjiaSpider.spider import LianjiaSecondHandASyncSpider, LianjiaSecondHandSpider
+from .lianjiaSpider.spider import LianjiaSecondHandASyncSpider, LianjiaSecondHandSpider, LianjiaEstateSpider

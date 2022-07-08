@@ -7,16 +7,14 @@ from bs4 import BeautifulSoup
 from . import constants
 
 
-class LianjiaSecondHandSpider:
-    """链家二手房爬虫"""
-    def __init__(self, city_name):
-        self.city_name = city_name
-        self.headers = constants.HEADERS
-        self.subdomain = constants.SUB_DOMAIN_DICT[self.city_name]  # 获取对应城市的子域名
+class LianjiaSpiderAbstract:
+    """链家爬虫抽象类"""
+    city_name = None
+    headers = None
+    subdomain = None  # 城市子域名
 
-    def get_all_urls_by_location(self):
-        """获取通过位置参数筛选的所有位置的二手房的初始页面 URL"""
-        start_url = f"{self.subdomain}ershoufang/"
+    def get_all_urls_by_location(self, start_url):
+        """获取通过区域筛选信息的最小单位的初始页面 URL"""
         req = requests.get(start_url, headers=self.headers)
         soup = BeautifulSoup(req.text, "html.parser")
         tag_list = soup.select("div[data-role='ershoufang'] div a")  # 筛选出辖区 a 标签列表
@@ -37,6 +35,86 @@ class LianjiaSecondHandSpider:
                 location_urls.append(f"{self.subdomain}{item.get('href')}")
 
         return location_urls
+
+    def get_page_urls(self, start_url):
+        """通过初始页 URL 获取所有分页 URL"""
+        # 1. 取得最大页数
+        # 2. 根据链家的路由设计计算 URL
+        req = requests.get(start_url, headers=self.headers)
+        soup = BeautifulSoup(req.text, "html.parser")
+
+        if "人机" in soup.select_one("title").text:
+            return False
+
+        page_tag = soup.select_one(".page-box.house-lst-page-box").get("page-data")  # 获取页数标签对象
+        page_dict = json.loads(page_tag)
+
+        url_list = [start_url + f"pg{i}" for i in range(1, page_dict["totalPage"] + 1)]  # 组合 URL 列表
+        return url_list
+
+
+class LianjiaSecondHandSpider(LianjiaSpiderAbstract):
+    """链家二手房爬虫"""
+    def __init__(self, city_name):
+        self.city_name = city_name
+        self.headers = constants.HEADERS
+        self.subdomain = constants.SUB_DOMAIN_DICT[self.city_name]  # 获取对应城市的子域名
+
+    def get_urls(self):
+        """获取所有爬行需要的 URL"""
+        start_url = f"{self.subdomain}ershoufang"
+        url_list = self.get_all_urls_by_location(start_url)
+        return url_list
+
+
+class LianjiaEstateSpider(LianjiaSpiderAbstract):
+    """链家小区爬虫"""
+
+    def __init__(self, city_name):
+        self.city_name = city_name
+        self.headers = constants.HEADERS
+        self.subdomain = constants.SUB_DOMAIN_DICT[self.city_name]  # 获取对应城市的子域名
+
+    @staticmethod
+    def parse_one_page(text):
+        """解析一页内容"""
+        soup = BeautifulSoup(text, "html.parser")
+        info_list = soup.select(".clear.xiaoquListItem")
+
+        estate_list = []  # 存放当前页面全部小区信息
+        for item in info_list:  # 遍历解析当前页的全部数据
+            title = item.select_one(".title a").text  # 标题
+            house_code = item.get("data-housecode")  # 房子代码
+            house_district = item.select_one(".bizcircle").text  # 商圈或地区
+
+            temp = {
+                "title": title,
+                "house_code": house_code,
+                "house_district": house_district
+            }
+            estate_list.append(temp)
+        return estate_list
+
+    def get_urls(self):
+        """获取所有爬行需要的 URL"""
+        start_url = f"{self.subdomain}xiaoqu"
+        url_list = self.get_all_urls_by_location(start_url)
+        return url_list
+
+    def get_all_estates(self):
+        """获取所有小区信息"""
+        url_list = self.get_urls()
+        info_list = []  # 存放所有的小区信息
+
+        for url in url_list:  # 遍历最小单位的初始 URL
+            page_urls = self.get_page_urls(url)
+            print(f"[INFO] 正在爬行：{url}")
+            for p_url in page_urls:
+                req = requests.get(p_url, headers=self.headers)
+                temp_list = self.parse_one_page(req.text)  # 解析出每一页的内容
+                info_list.extend(temp_list)
+
+        return info_list
 
 
 class LianjiaSecondHandASyncSpider:

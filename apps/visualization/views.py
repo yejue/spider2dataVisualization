@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from django.views import View
 from django.contrib.auth.models import User
 
-from spiders import LianjiaSecondHandASyncSpider
+from spiders import LianjiaSecondHandASyncSpider, LianjiaEstateSpider
 from libs.response import json_response
 from apps.visualization import models as v_models
 from . import constants
@@ -54,8 +54,29 @@ class LianJiaDistrictSpiderView(View):
             tag_location_list = tag.select("a")
 
             for item in tag_location_list:  # 遍历入库子级区域
+                if v_models.DistrictModel.objects.filter(district_name=item.text):
+                    continue
                 location_model = v_models.DistrictModel(district_name=item.text, city=city_obj, parent=district_model)
                 location_model.save()
+
+        return json_response()
+
+
+class LianJiaEstateSpiderView(View):
+    """链家小区入库爬虫视图"""
+    def get(self, request):
+        city_name = self.request.GET.get("city_name", "深圳")
+        spider = LianjiaEstateSpider(city_name)
+        info_list = spider.get_all_estates()  # 获取所有小区信息
+
+        for item in info_list:  # 遍历将数据入库
+            district = v_models.DistrictModel.objects.get(district_name=item["house_district"])
+            if v_models.EstateModel.objects.filter(house_code=item["house_code"]):
+                continue
+            estate = v_models.EstateModel(
+                district=district, estate_name=item["title"], house_code=item["house_code"]
+            )
+            estate.save()
 
         return json_response()
 
