@@ -52,6 +52,43 @@ class LianjiaSpiderAbstract:
         url_list = [start_url + f"pg{i}" for i in range(1, page_dict["totalPage"] + 1)]  # 组合 URL 列表
         return url_list
 
+    @staticmethod
+    def parse_one_page(text):
+        """解析一页的内容"""
+        soup = BeautifulSoup(text, "html.parser")
+        info_list = soup.select(".info.clear")
+
+        house_list = []  # 存放当前页面全部房子信息
+        for item in info_list:  # 遍历解析当前页的全部数据
+            title = item.select_one(".title a").text  # 标题
+
+            house_code = item.select_one(".title a").get("data-housecode")  # 房子代码
+            if not house_code:  # 如果为空，则使用第二个参数获取 house_code
+                house_code = item.select_one(".title a").get("data-lj_action_housedel_id")
+
+            estate = item.select(".positionInfo a")[0].text  # 小区
+            location = item.select(".positionInfo a")[1].text  # 大致位置
+
+            house_info = item.select_one(".houseInfo").text.split("|")  # 房子信息文本列表
+            house_type = house_info[0].strip()  # 户型
+            house_area = float(re.findall(r'\d+\.\d+|\d+', house_info[1])[0])  # 房子面积
+
+            total_price = float(item.select_one(".totalPrice.totalPrice2 span").text.strip())  # 房子总价
+            unit_price = float(re.findall(r"\d+", item.select_one(".unitPrice span").text.replace(",", ""))[0])  # 每单位价格
+
+            temp = {
+                "title": title,
+                "house_code": house_code,
+                "estate": estate,
+                "location": location,
+                "house_type": house_type,
+                "house_area": house_area,
+                "total_price": total_price,
+                "unit_price": unit_price
+            }
+            house_list.append(temp)
+        return house_list
+
 
 class LianjiaSecondHandSpider(LianjiaSpiderAbstract):
     """链家二手房爬虫"""
@@ -64,7 +101,21 @@ class LianjiaSecondHandSpider(LianjiaSpiderAbstract):
         """获取所有爬行需要的 URL"""
         start_url = f"{self.subdomain}ershoufang"
         url_list = self.get_all_urls_by_location(start_url)
-        return url_list
+        res_list = []
+        for url in url_list:  # 通过每个位置 URL 初始页计算出该位置选项下所有的页面 URL
+            page_list = self.get_page_urls(url)
+            res_list.extend(page_list)
+        return res_list
+
+    def get_houses(self):
+        """获取所有二手房信息"""
+        url_list = self.get_urls()
+
+        for url in url_list:
+            req = requests.get(url, headers=self.headers)
+            temp_list = self.parse_one_page(req.text)  # 获取每一页解析出来的结果
+            print(f"[INFO] 正在爬行: {url}, 获取到数量：{len(temp_list)}")
+            yield temp_list
 
 
 class LianjiaEstateSpider(LianjiaSpiderAbstract):
@@ -117,7 +168,7 @@ class LianjiaEstateSpider(LianjiaSpiderAbstract):
         return info_list
 
 
-class LianjiaSecondHandASyncSpider:
+class LianjiaSecondHandASyncSpider(LianjiaSpiderAbstract):
     """链家二手房异步爬虫"""
 
     def __init__(self, city_name):
@@ -139,39 +190,6 @@ class LianjiaSecondHandASyncSpider:
 
         url_list = [start_url+f"pg{i}" for i in range(1, page_dict["totalPage"]+1)]  # 组合 URL 列表
         return url_list
-
-    @staticmethod
-    def parse_one_page(text):
-        """解析一页内容"""
-        soup = BeautifulSoup(text, "html.parser")
-        info_list = soup.select(".info.clear")
-
-        house_list = []  # 存放当前页面全部房子信息
-        for item in info_list:  # 遍历解析当前页的全部数据
-            title = item.select_one(".title a").text  # 标题
-            house_code = item.select_one(".title a").get("data-housecode")  # 房子代码
-            estate = item.select(".positionInfo a")[0].text  # 小区
-            location = item.select(".positionInfo a")[1].text  # 大致位置
-
-            house_info = item.select_one(".houseInfo").text.split("|")  # 房子信息文本列表
-            house_type = house_info[0].strip()  # 户型
-            house_area = float(re.findall(r'\d+\.\d+|\d+', house_info[1])[0])  # 房子面积
-
-            total_price = float(item.select_one(".totalPrice.totalPrice2 span").text.strip())  # 房子总价
-            unit_price = float(re.findall(r"\d+", item.select_one(".unitPrice span").text.replace(",", ""))[0])  # 每单位价格
-
-            temp = {
-                "title": title,
-                "house_code": house_code,
-                "estate": estate,
-                "location": location,
-                "house_type": house_type,
-                "house_area": house_area,
-                "total_price": total_price,
-                "unit_price": unit_price
-            }
-            house_list.append(temp)
-        return house_list
 
     async def get_one_page(self, url, sem):
         """异步获取一页的内容"""

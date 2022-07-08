@@ -3,8 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from django.views import View
 from django.contrib.auth.models import User
+from django.db.models import Q
 
-from spiders import LianjiaSecondHandASyncSpider, LianjiaEstateSpider
+from spiders import LianjiaEstateSpider, LianjiaSecondHandSpider
 from libs.response import json_response
 from apps.visualization import models as v_models
 from . import constants
@@ -71,7 +72,10 @@ class LianJiaEstateSpiderView(View):
 
         for item in info_list:  # 遍历将数据入库
             district = v_models.DistrictModel.objects.get(district_name=item["house_district"])
-            if v_models.EstateModel.objects.filter(house_code=item["house_code"]):
+
+            if v_models.EstateModel.objects.filter(  # 如果出现同一个小区名或房子码相同，则视为同一小区，跳过操作
+                    Q(house_code=item["house_code"]) | Q(estate_name=item["title"])
+            ):
                 continue
             estate = v_models.EstateModel(
                 district=district, estate_name=item["title"], house_code=item["house_code"]
@@ -85,20 +89,25 @@ class LianJiaSecondHandSpiderView(View):
     """链家城市二手房信息入库视图"""
 
     def get(self, request):
-        spider = LianjiaSecondHandASyncSpider("深圳")
-        res = spider.run()
+        spider = LianjiaSecondHandSpider("深圳")
+        res = spider.get_houses()
+
         if not res:
             return json_response("请进行人机认证")
-        for item in res:
-            user = User.objects.get(username="spider")
-            city = v_models.CityModel.objects.get(city_name=spider.city_name)
-            item["created_by"] = user  # 设置用户外键
-            item["city"] = city  # 设置城市外键
 
-            house_obj = v_models.HouseInfoModel.objects.filter(house_code=item["house_code"])
-            if house_obj:
-                house_obj.update(**item)
-                continue
-            v_models.HouseInfoModel.objects.create(**item)
+        for info_list in res:
+            for item in info_list:  # 从每一页的数据中遍历每一条目信息
+
+                user = User.objects.get(username="spider")
+                estate = v_models.EstateModel.objects.filter(estate_name=item["estate"]).first()
+
+                item["created_by"] = user  # 设置用户外键
+                item["estate"] = estate  # 设置城市外键
+
+                house_obj = v_models.HouseInfoModel.objects.filter(house_code=item["house_code"])
+                if house_obj:
+                    house_obj.update(**item)
+                    continue
+                v_models.HouseInfoModel.objects.create(**item)
 
         return json_response()
