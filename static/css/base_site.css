@@ -18,3 +18,23 @@ ul li{
     max-width: 40px;
     max-height: 40px;
 }
+
+/*全局右侧任务贴图*/
+.right_bg{
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: auto;
+}
+
+/*全局 contain-main*/
+.breadcrumbs,
+#content-main,
+#content-related,
+#nav-sidebar{
+    opacity: 0.85;
+}
+
+#header{
+    opacity: 0.9;
+}
