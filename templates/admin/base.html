@@ -1,11 +1,11 @@
 {% load i18n static %}
-{% load static %}
 
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
     <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/geo.png' %}">
     <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
     {% if not is_popup and is_nav_sidebar_enabled %}
         <link rel="stylesheet" type="text/css" href="{% static "admin/css/nav_sidebar.css" %}">
@@ -24,10 +24,18 @@
     {% endblock %}
     {% block blockbots %}
         <meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+
+    {% block extra_head %}
+
+    {% endblock %}
 </head>
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
       data-admin-utc-offset="{% now "Z" %}">
+
+{% block bottomplugin %}
+
+{% endblock %}
 
 <!-- Container -->
 <div id="container">
