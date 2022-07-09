@@ -8,24 +8,25 @@ from libs.admin import BaseAdmin
 class CityAdmin(BaseAdmin):
     """城市管理类"""
     list_display = ["id", "city_name", "subdomain"]
+    search_fields = ["city_name", "subdomain"]
 
 
 class DistrictAdmin(BaseAdmin):
     """辖区管理类"""
-    list_display = ["id", "district_name", "parent", "lon", "lat"]
-    search_fields = ["district_name"]
+    list_display = ["id", "city", "district_name", "parent", "lon", "lat"]
+    search_fields = ["district_name", "city__city_name"]
 
 
 class EstateAdmin(BaseAdmin):
     """小区管理类"""
     list_display = ["id", "estate_name", "district", "house_code", "lon", "lat"]
-    search_fields = ["estate_name"]
+    search_fields = ["estate_name", "house_code", "district__district_name"]
 
 
 class HouseInfoAdmin(BaseAdmin):
     """房子信息管理类"""
     list_display = ["id", "title", "estate", "house_type", "house_area", "total_price", "house_code"]
-    search_fields = ["title", "house_type"]
+    search_fields = ["title", "house_type", "house_code", "estate__estate_name"]
 
 
 admin.site.register(CityModel, CityAdmin)
