@@ -1,4 +1,5 @@
 import requests
+import logging
 
 from bs4 import BeautifulSoup
 from django.views import View
@@ -11,6 +12,8 @@ from apps.visualization import models as v_models
 from . import constants
 
 # Create your views here.
+
+spider_logger = logging.getLogger("spider")
 
 
 class LianJiaCitySpiderView(View):
@@ -29,6 +32,7 @@ class LianJiaCitySpiderView(View):
             user = User.objects.get(username="spider")
 
             v_models.CityModel.objects.get_or_create(city_name=city_name, subdomain=href, created_by=user)
+        spider_logger.info("链家城市入库爬虫爬行完毕")
         return json_response()
 
 
@@ -58,7 +62,7 @@ class LianJiaDistrictSpiderView(View):
                     continue
                 location_model = v_models.DistrictModel(district_name=item.text, city=city_obj, parent=district_model)
                 location_model.save()
-
+        spider_logger.info("链家辖区表入库爬虫爬行完毕")
         return json_response()
 
 
@@ -80,7 +84,7 @@ class LianJiaEstateSpiderView(View):
                 district=district, estate_name=item["title"], house_code=item["house_code"]
             )
             estate.save()
-
+        spider_logger.info("链家小区表入库爬虫爬行完毕")
         return json_response()
 
 
@@ -88,7 +92,8 @@ class LianJiaSecondHandSpiderView(View):
     """链家城市二手房信息入库视图"""
 
     def get(self, request):
-        spider = LianjiaSecondHandSpider("深圳")
+        city_name = self.request.GET.get("city_name", "深圳")
+        spider = LianjiaSecondHandSpider(city_name)
         res = spider.get_houses()
 
         if not res:
@@ -108,5 +113,5 @@ class LianJiaSecondHandSpiderView(View):
                     house_obj.update(**item)
                     continue
                 v_models.HouseInfoModel.objects.create(**item)
-
+        spider_logger.info(f"链家{city_name}二手房数据爬虫爬行完毕")
         return json_response()
