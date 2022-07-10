@@ -3,14 +3,19 @@
 
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
     {{ form.media }}
+{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "css/login.css" %}">
 {% endblock %}
 
 {% block bodyclass %}{{ block.super }} login{% endblock %}
 
 {% block bottomplugin %}
     <video src="{% static 'video/raidene.webm' %}" class="fullscreen" autoplay loop muted></video>
+    <audio src="{% static 'video/Violet_Thunder.mp3' %}" autoplay loop></audio>
 {% endblock %}
 
 {% block usertools %}{% endblock %}

@@ -9,8 +9,20 @@
 {% endblock %}
 
 {% block bottomplugin %}
-    <img src="{% static 'images/feixier.png' %}" alt="" class="right_bg">
+    <ul class="character-painting-list">
+        <li>
+            <img id="feixier" src="{% static 'images/feixier.png' %}" alt="" class="right_bg active">
+            <img id="keqing" src="{% static 'images/keqing.png' %}" alt="" class="right_bg" style="display: none">
+        </li>
+    </ul>
+    <img src="{% static 'images/left_logo.png' %}" alt="" class="left-logo up-animated">
+
+    <ul class="character-index-list">
+        <li data-character="feixier" class="character-active"><img src="{% static 'images/feixier_head.png' %}" alt=""><p>菲谢尔</p></li>
+        <li data-character="keqing"><img src="{% static 'images/keqing_head.png' %}" alt=""><p>刻晴</p></li>
+    </ul>
 {% endblock %}
+
 {% block header %}
     <div id="header">
         <div id="branding">
@@ -61,4 +73,28 @@
         {% block nav-global %}{% endblock %}
     </div>
 {% endblock %}
+{% block extra_script %}
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script>
+        // 人物立绘切换
+        // 1. 点击人物索引
+        // 2. 根据索引值取得人物立绘
+        // 3. 按顺序执行操作：去除全部 active 状态，将 this 设置为 active，将当前淡出，将对应 id 立绘淡入
+        function switch_character(){
+            let click_el = $(this);
+            let character_id = click_el.data("character");
+            // 转移 active 到 this
+            $(".character-index-list li").removeClass("character-active")
+            click_el.addClass("character-active")
+            // 将当前的淡出，将选择的角色淡入
+            let visible_el = $('.character-painting-list li .active')
+            visible_el.fadeOut()
+            visible_el.removeClass("active")
 
+            let selected_el = $("#"+character_id)
+            selected_el.fadeIn();
+            selected_el.addClass("active")
+        }
+        $('.character-index-list li').click(switch_character)
+    </script>
+{% endblock %}
