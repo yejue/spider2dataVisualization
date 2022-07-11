@@ -48,7 +48,7 @@ class EstateModel(BaseModel):
     house_code = models.CharField("房子编号", max_length=32, unique=True, help_text="房子编号", null=True)
 
     def __str__(self):
-        return f"<id: {self.id} district: {self.estate_name}>"
+        return f"<id: {self.id} 小区名: {self.estate_name}>"
 
     class Meta:
         db_table = "estate"
@@ -71,7 +71,7 @@ class HouseInfoModel(BaseModel):
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"[{self.house_code}]{self.estate}——{self.title}>"
+        return f"<{self.estate.estate_name} title: {self.title}>"
 
     class Meta:
         db_table = "house_info"
