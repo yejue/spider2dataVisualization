@@ -8,6 +8,7 @@ from django.db.models import Q
 
 from spiders import LianjiaEstateSpider, LianjiaSecondHandSpider
 from libs.response import json_response
+from libs.baiduTools import BaiduMap
 from apps.visualization import models as v_models
 from . import constants
 
@@ -113,4 +114,28 @@ class LianJiaSecondHandSpiderView(View):
                     continue
                 v_models.HouseInfoModel.objects.create(**item)
         spider_logger.info(f"链家{city_name}二手房数据爬虫爬行完毕")
+        return json_response()
+
+
+class EstateAddCoordinateView(View):
+    """小区坐标入库视图
+     - 用于处理小区表的坐标获取并入库
+    """
+    def get(self, request):
+        queryset = v_models.EstateModel.objects.filter(lon=None, lat=None)
+        map_tool = BaiduMap()  # 百度地图工具
+
+        for item in queryset:  # 遍历每一个条目，用其中地址获取坐标入库
+            if item.lon and item.lat:  # 已经存在则跳过，省钱
+                continue
+
+            address = f"广东省{item.district.city.city_name}{item.district.district_name}{item.estate_name}"
+            res = map_tool.get_coordinate_by_address(address)
+            if res["status"] != 0:  # 状态不正常时跳过
+                continue
+
+            lon, lat = res["result"]["location"]["lng"], res["result"]["location"]["lat"]
+            item.lon = lon
+            item.lat = lat
+            item.save()
         return json_response()
