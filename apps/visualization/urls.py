@@ -8,5 +8,6 @@ urlpatterns = [
     path("add_district/", views.LianJiaDistrictSpiderView.as_view(), name="add_district"),
     path("add_estate/", views.LianJiaEstateSpiderView.as_view(), name="add_estate"),
     path("add_data/", views.LianJiaSecondHandSpiderView.as_view(), name="add_data"),
-    path("add_coordinate/", views.EstateAddCoordinateView.as_view(), name="add_coordinate"),
+    path("add_estate_coordinate/", views.EstateAddCoordinateView.as_view(), name="add_estate_coordinate"),
+    path("add_district_coordinate/", views.DistrictAddCoordinateView.as_view(), name="add_district_coordinate"),
 ]
