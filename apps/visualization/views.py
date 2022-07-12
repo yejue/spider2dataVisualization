@@ -1,3 +1,4 @@
+import os
 import requests
 import logging
 
@@ -15,6 +16,7 @@ from . import constants
 # Create your views here.
 
 spider_logger = logging.getLogger("spider")
+BAIDU_MAP_AK = os.getenv("BAIDU_MAP_AK")  # 百度地图 access_key
 
 
 class LianJiaCitySpiderView(View):
@@ -122,8 +124,9 @@ class EstateAddCoordinateView(View):
      - 用于处理小区表的坐标获取并入库
     """
     def get(self, request):
+        access_key = BAIDU_MAP_AK
         queryset = v_models.EstateModel.objects.filter(lon=None, lat=None)
-        map_tool = BaiduMap()  # 百度地图工具
+        map_tool = BaiduMap(access_key)  # 百度地图工具
 
         for item in queryset:  # 遍历每一个条目，用其中地址获取坐标入库
             if item.lon and item.lat:  # 已经存在则跳过，省钱
