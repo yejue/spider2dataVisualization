@@ -49,8 +49,7 @@ class LianJiaDistrictSpiderView(View):
         tag_list = soup.select("div[data-role='ershoufang'] div a")  # 筛选出辖区 a 标签列表
 
         for tag in tag_list:  # 遍历所有辖区标签，访问并取得子级位置信息和对应 URL 入库
-            district_model = v_models.DistrictModel.objects.get_or_create(district_name=tag.text, city=city_obj)
-
+            district = v_models.DistrictModel.objects.get_or_create(district_name=tag.text, city=city_obj)[0]
             temp_url = tag.get("href")  # 获取该次遍历的辖区 URL
             req = requests.get(f"{start_url}{temp_url}", headers=constants.HEADERS)
             soup = BeautifulSoup(req.text, "html.parser")
@@ -60,7 +59,7 @@ class LianJiaDistrictSpiderView(View):
             for item in tag_location_list:  # 遍历入库子级区域
                 if v_models.DistrictModel.objects.filter(district_name=item.text):
                     continue
-                location_model = v_models.DistrictModel(district_name=item.text, city=city_obj, parent=district_model)
+                location_model = v_models.DistrictModel(district_name=item.text, city=city_obj, parent=district)
                 location_model.save()
         spider_logger.info("链家辖区表入库爬虫爬行完毕")
         return json_response()
