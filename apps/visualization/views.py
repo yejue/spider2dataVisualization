@@ -1,3 +1,4 @@
+import os
 import requests
 import logging
 
@@ -8,12 +9,14 @@ from django.db.models import Q
 
 from spiders import LianjiaEstateSpider, LianjiaSecondHandSpider
 from libs.response import json_response
+from libs.baiduTools import BaiduMap
 from apps.visualization import models as v_models
 from . import constants
 
 # Create your views here.
 
 spider_logger = logging.getLogger("spider")
+BAIDU_MAP_AK = os.getenv("BAIDU_MAP_AK")  # 百度地图 access_key
 
 
 class LianJiaCitySpiderView(View):
@@ -113,4 +116,52 @@ class LianJiaSecondHandSpiderView(View):
                     continue
                 v_models.HouseInfoModel.objects.create(**item)
         spider_logger.info(f"链家{city_name}二手房数据爬虫爬行完毕")
+        return json_response()
+
+
+class EstateAddCoordinateView(View):
+    """小区坐标入库视图
+     - 用于获取小区表中条目地址对应的坐标，并更新对应条目
+    """
+    def get(self, request):
+        access_key = BAIDU_MAP_AK
+        queryset = v_models.EstateModel.objects.filter(lon=None, lat=None)
+        map_tool = BaiduMap(access_key)  # 百度地图工具
+
+        for item in queryset:  # 遍历每一个条目，用其中地址获取坐标入库
+            address = f"广东省{item.district.city.city_name}{item.district.district_name}{item.estate_name}"
+            res = map_tool.get_coordinate_by_address(address)
+            if res["status"] != 0:  # 状态不正常时跳过
+                print(res)
+                continue
+
+            lon, lat = res["result"]["location"]["lng"], res["result"]["location"]["lat"]
+            item.lon = lon
+            item.lat = lat
+            item.save()
+        spider_logger.info("小区坐标更新成功")
+        return json_response()
+
+
+class DistrictAddCoordinateView(View):
+    """辖区坐标获取与入库视图
+     - 用于获取辖区表中条目地址对应的坐标，并更新对应条目
+    """
+    def get(self, request):
+        access_key = BAIDU_MAP_AK
+        queryset = v_models.DistrictModel.objects.filter(lon=None, lat=None, parent__isnull=False)  # 去除行政区和有坐标的条目
+        map_tool = BaiduMap(access_key)  # 百度地图工具
+
+        for item in queryset:  # 遍历每一个条目，用其中地址获取坐标入库
+            address = f"广东省{item.city.city_name}{item.parent.district_name}{item.district_name}"
+            res = map_tool.get_coordinate_by_address(address)
+            if res["status"] != 0:  # 状态不正常时跳过
+                print(res)
+                continue
+
+            lon, lat = res["result"]["location"]["lng"], res["result"]["location"]["lat"]
+            item.lon = lon
+            item.lat = lat
+            item.save()
+        spider_logger.info("辖区坐标更新成功")
         return json_response()
