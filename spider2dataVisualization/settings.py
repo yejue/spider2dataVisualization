@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.spider',   # 爬虫 APP
     'apps.visualization',  # 可视化 APP
     'apps.apiv1',  # 可视化 APP
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -211,4 +212,10 @@ LOGGING = {
             'level': 'INFO',
         },
     }
+}
+
+# REST框架
+REST_FRAMEWORK = {
+    # 设置了PageNumberPagination分页器,自定义在视图类里
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 }
