@@ -16,38 +16,38 @@
 </head>
 <body>
     <div class="sidebar-container">
-        <div class="sidebar-title">抽卡不歪</div>
+        <div class="sidebar-title">抽卡不歪✨</div>
         <div class="sidebar-list">
-            <a href="#" target="_blank">
+            <a href="{% url 'portal:index' %}">
                 <div class="page-nav">
                     <div class="page-logo">
-                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                        <img src="{% static 'images/keli.png' %}" alt="">
                     </div>
-                    <div class="page-name">页面1</div>
+                    <div class="page-name">首的页</div>
                 </div>
             </a>
-            <a href="#" target="_blank">
+            <a href="{% url 'portal:distribution' %}">
                 <div class="page-nav">
                     <div class="page-logo">
-                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                        <img src="{% static 'images/page_logo2.png' %}" alt="">
                     </div>
-                    <div class="page-name">页面2</div>
+                    <div class="page-name">态势分布</div>
                 </div>
             </a>
-            <a href="#" target="_blank">
+            <a href="{% url 'portal:big_view' %}">
                 <div class="page-nav">
                     <div class="page-logo">
-                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                        <img src="{% static 'images/page_logo3.png' %}" alt="">
                     </div>
-                    <div class="page-name">页面3</div>
+                    <div class="page-name">看大的</div>
                 </div>
             </a>
-            <a href="#" target="_blank">
+            <a href="{% url 'portal:video_list' %}">
                 <div class="page-nav">
                     <div class="page-logo">
-                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                        <img src="{% static 'images/page_logo4.png' %}" alt="">
                     </div>
-                    <div class="page-name">页面4</div>
+                    <div class="page-name">Race Race</div>
                 </div>
             </a>
         </div>
