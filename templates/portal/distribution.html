@@ -1,6 +1,7 @@
 {% extends "portal/base.html" %}
 {% load static %}
 
+
 {% block subtitle %}
     房价分布
 {% endblock %}
@@ -10,8 +11,171 @@
 {% endblock %}
 
 {% block container %}
-
+<div id="container" style="height: 100%"></div>
 {% endblock %}
 
 {% block script %}
+   <script type="text/javascript">
+       const dom = document.getElementById('container');
+       const address_list = [
+    {
+      '观澜湖':[114.07662793721526,22.734602044976892],
+      '西丽山庄':[113.98043549679703,22.59505620892735],
+      '鸿荣源·壹方中心·玖誉':[113.89413196275157,22.558646985674],
+      '波托菲诺纯水岸四期':[113.97930282337987,22.555589310473923],
+      '海上世界双玺':[113.92628599999566,22.48680051332269],
+      '百仕达红树西岸':[113.97226289293106,22.528062308733464],
+      '波托菲诺纯水岸十五期':[113.97854195861318,22.5549690058216],
+      '东海花园':[114.02818824989453,22.544343201333714],
+      '鲸山觐海':[113.91373496524493,22.48470556452431],
+      '天鹅湖花园二期':[113.9920789734913,22.55205602278026],
+      },
+      {
+        '金地国际公寓':[113.95736341808636,22.533357963708315],
+        '瑧湾汇':[113.97558123348382,22.53022302486318],
+        '有方育才家园':[113.93612397244603,22.499032957869364],
+        '金地香蜜山':[114.02348041037938,22.56023366220199],
+        '香山美墅云颂':[113.9761922608915,22.558829134007034],
+        '水木一方大厦':[113.93439114111784,22.53942717562784],
+      }
+    ]
+    const total_price = [
+     {name: '观澜湖', value:8500},
+     {name: '西丽山庄', value:6838},
+     {name: '鸿荣源·壹方中心·玖誉', value:5024.0},
+     {name: '波托菲诺纯水岸四期', value:4421.0},
+     {name: '海上世界双玺', value:4293.0},
+     {name: '百仕达红树西岸', value:4121.0},
+     {name: '波托菲诺纯水岸十五期', value:3856.0},
+     {name: '东海花园', value:3823.0},
+     {name: '鲸山觐海', value:3800},
+     {name: '天鹅湖花园二期', value:3651.0},
+    ];
+    const convertData = function (data) {   //转换数据
+    const res = [];
+    for (let i = 0; i < data.length; i++) {
+        let geoCoord = address_list[0][data[i].name];   //地理坐标
+
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+
+            });
+        }
+    }
+    return res;
+};
+    let clearData = function (data)
+    {
+      let points = [].concat.apply(
+        [],
+        data.map(function(track){
+          return track.map(function (seg){
+            return seg.coord.concat([1]);
+          });
+        })
+      )
+    };
+
+    let myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    let app = {};
+    let option;
+  myChart.setOption(
+    (option = {
+    tooltip : {
+        trigger: 'item'
+    },
+      animation: false,
+      bmap: {
+        center: [114.064505,22.54918],
+        zoom: 12,
+        roam: true
+      },
+      series: [
+        {
+          type: 'scatter',
+          coordinateSystem: 'bmap',
+          data:convertData(total_price),
+          pointSize: 5,
+          symbolSize:function(val)
+          {
+            return (val[2]/30) / 10;
+          },
+          encode: {
+            value: 2
+          },
+          label:{
+            normal: {   //默认
+                    formatter: '{b}',
+                    position: 'right',
+                    show: false
+                },
+                emphasis: {  //悬浮
+                    show: true
+                }
+          },
+          itemStyle: {
+                normal: {
+                  color:'rgba(255,0,0,0.6)',   //小圆点的颜色
+                }
+            }
+        },//上面是固定大小远点，往下是涟漪点
+        {
+            name: 'Top 10',
+            type: 'effectScatter',  //带有涟漪特效动画的散点（气泡）
+            coordinateSystem: 'bmap',  //坐标系统
+            data: convertData(total_price.sort(function (a, b) {  //数据排序，截取前10个
+                return b.value - a.value;
+            }).slice(0, 10)),
+            symbolSize: function (val) {   //标志图形大小
+                return (val[2]/30) / 10; //涟漪圈大小
+            },
+            encode: {
+        value: 2
+      },
+            showEffectOn: 'render',   //绘制完成后显示特效。
+            rippleEffect: {           //涟漪特效相关配置。
+                brushType: 'stroke'    //波纹的绘制方式
+            },
+            hoverAnimation: true,
+            label: {
+                normal: {
+                    formatter: '{b}',
+                    position: 'right',
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                  color:'rgba(255,0,0,0.6)',
+                    shadowBlur: 0.8,     //模糊度
+
+                    // shadowColor: '#333'  //阴影颜色
+                }
+            },
+            zlevel: 1      //一级层叠控制
+        },
+        // {
+        //   type: 'heatmap',  //热力图
+        //   coordinateSystem: 'bmap',  //坐标系统
+        //   data:clearData(),
+        //   pointSize: 5,
+        //   blurSize: 6
+        // },
+
+      ]
+    })
+  );
+  // 添加百度地图插件
+  let bmap = myChart.getModel().getComponent('bmap').getBMap();
+  bmap.addControl(new BMap.MapTypeControl());
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+    window.addEventListener('resize', myChart.resize);
+  </script>
 {% endblock %}
