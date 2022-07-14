@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.visualization',  # 可视化 APP
     'apps.apiv1',  # 可视化 APP
     'apps.portal',  # 前台 APP
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
