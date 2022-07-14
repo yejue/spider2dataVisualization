@@ -8,3 +8,8 @@ class IndexView(View):
     def get(self, request):
         return render(self.request, "portal/index.html")
 
+
+class HousingPriceDistributionView(View):
+    """房价分布页视图"""
+    def get(self, request):
+        return render(self.request, "portal/distribution.html")
