@@ -1,0 +1,75 @@
+@font-face {
+    font-family: introduce;
+    src: url("../font/cuyuan.ttf");
+}
+
+/*最大容器*/
+.main-page {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+}
+
+/*漂浮在中间的牌子*/
+.float-center {
+    margin: auto;
+    position: relative;
+    float: left;
+    left: 10vw;
+    top: 10vh;
+    /*color: rgba(67, 142, 194, 0.7);*/
+    color: rgb(255, 255, 255);
+    /*background: linear-gradient(120deg, rgb(185 225 255), rgb(216 241 253));*/
+    /*border-top: #e8cba7 solid 6px;*/
+    /*border-bottom: #e8cba7 solid 6px;*/
+    /*border-radius: 5px;*/
+    /*opacity: 0.85;*/
+}
+.float-center .group-title {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAioAAAAnCAYAAAAhMWNEAAAEwElEQVR4nO3dW5LaMBBAUUFlJVljlpU9Mj+hSFFgt9Rv+Z6vKSywx49uWZKt2+8/f8cY4zbOnZX5tvzoe5+WzfyOtuz7Z6vf8/jMs+zs78wsl5YBsKeHQZlvy4++92nZzO9oy3p/pvktz7KzvzOzfIwxHvfhn1QkG1LF7MHx/K7ncaEiAaCj6LiYFf+7501Lt7vRSjomPk1rh7RiId0vmgtkZj0SFudDp4sMgJ1q8WMmNmpuGCNyxy55dlZIi0o06f+jqcVKT8CohJ11YQOAtWo3Xqvr0VR8rPNTZ7e70Q9VuoPWHEzNAe50clQ6XgAg1Sl2WecTTSUni8m2WFVUjlRN4NqBSZJyVSs+3sek6jEH4KtzbLGO19ZjVCpVQP7nHu+txqjswnqHa/at53FZGb0NABGy4lOleM3N3ssjokWl6omlORG6J3MuAgAddY9dO+Ys93y4Y9dPxPq6j8g+OrE6/R8A9nMUgzrdJGblie1ybsX3qGQ9ljuzjk4XyydURgB01D12Rb8za2Udnjl7hdlTP4crcSwfMeBIemJlnYArvPuAu1fkAKzxjh9VY4smJ0TkLM8GgDKDaav2jUUMfs2qlGRVcizWW7WCBsBX5/gREcOzKi+e+9R73I34hW9ZA4DORNSus0aCd6rgAUCEqvmkaqyPWId3Q4bZK/SzWO8gzeuSNeWsv3uGrh8AHjp3/UTE66hpVVbXW9GWkxJWOmGq17I/OdsvVEIAaJzFkKykGhGvq98gr9hiUsLuOy2iUhKtaksPgP1dJf5k5Y5KjQNmkxJasNwx2t/K6g7KVG0bq20PgBjVrv1q2/NJtW6eSvl8jGH3HhXLkyHz8WTrKb2jdGrNAYAombFRkyesb7iz3k9mUr9gMO3aZ9XM7ocO/xMAvJuNXR1aVCJyUYf98M2l5/qR0kytHXVy7HjxAsC7qjdlmu6biHjcOg9HjFHpNC33Jx2f3NHouM0A9tExBkXkiaqDkN3nZrKqqFztDr3roFsJk1HaBr8BoB/vp0g72XGeuFkmxzKiRaVTk5N08BMnIADgiPSGNuLhjKw8XOqpnyPbTTmNUxwD4Jq49vPtlnNDXvgW/crjrHkTuEBfaF0Crolr/+Uq+cl7jKrZK/SzTk7rAUzSz6xPwOj9591UR6UNuCbvfFIpVq58V5o7rB9P7pijny79HhVNv6B1jbVSYq+0LQCup1IMso7rmid8dskxs0Leo1J1B2laT6pODiXl3VXXufILYJ13/OgYU8/KaVpZKnA/JhGDaTvp3qVjgfMBQKaOMSiii+iqSnb9zGwPb6ZdwxgVAB52G6MitdObaavt45Kv0J85aBHPmmtOto5zM1DJAJCpY+zT3KhGdPN45tWQV+hLNuqszNHyqonPerBSpxYVxqgA8MAYlRfrG9VO/7tkmWT5GP+6fiSuMk5Duq07PrL8ZDItt8FvAOinc/zIehTZeluiuee57pMSRtjxqR8AgB3rp346CZmUkMGTL9ZdP51qxQCANdbxn5z68vj1/ENS2GCFAAAAYhFP/QAAACx5tqhkPfkz01/nUTbjs+z/2XPZSjkA+7AYLGq57Ft567Ka+XoiPosuK1kmWT5G0HtUqiKRAgC6uGzO+gGoUEWl4dRInQAAAABJRU5ErkJggg==");
+}
+
+.float-center p {
+    padding: 15px;
+    font-family: introduce;
+    font-size: 3em;
+    cursor: pointer;
+    text-shadow: 2px 2px black;
+}
+
+/*漂浮在页面杂乱的头像*/
+.float-random {
+    position: absolute;
+    height: 98vh;
+    width: 98vw;
+}
+.float-random img {
+    position: absolute;
+    border: #e8cba7;
+    border-radius: 50%;
+    background: #e8cba7;
+    box-shadow: 0 2px 3px rgb(138, 166, 189);
+}
+
+.float-random img:nth-child(1) {
+    bottom: 20vh;
+    right: 25vw;
+    animation: upAnimation 4s linear infinite;
+}
+
+.float-random img:nth-child(2) {
+    bottom: 24vh;
+    right: 40vw;
+    animation: downAnimation 4s linear infinite;
+}
+
+
+/*人物立绘*/
+.character-painting {
+    position: absolute;
+    height: 100vh;
+    width: auto;
+    right: 0;
+}

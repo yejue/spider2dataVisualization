@@ -1,0 +1,66 @@
+{% load static %}
+<!doctype html>
+<html lang="en" style='background: url("{% static 'images/index_bg.png' %}") no-repeat;'>
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'images/geo.png' %}">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/portal_base.css' %}">
+    <title>{% block subtitle %}{% endblock %} - 抽卡不歪</title>
+
+    {% block extra_head %}
+
+    {% endblock %}
+</head>
+<body>
+    <div class="sidebar-container">
+        <div class="sidebar-title">抽卡不歪</div>
+        <div class="sidebar-list">
+            <a href="#" target="_blank">
+                <div class="page-nav">
+                    <div class="page-logo">
+                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                    </div>
+                    <div class="page-name">页面1</div>
+                </div>
+            </a>
+            <a href="#" target="_blank">
+                <div class="page-nav">
+                    <div class="page-logo">
+                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                    </div>
+                    <div class="page-name">页面2</div>
+                </div>
+            </a>
+            <a href="#" target="_blank">
+                <div class="page-nav">
+                    <div class="page-logo">
+                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                    </div>
+                    <div class="page-name">页面3</div>
+                </div>
+            </a>
+            <a href="#" target="_blank">
+                <div class="page-nav">
+                    <div class="page-logo">
+                        <img width="68" height="68" src="{% static 'images/keli.png' %}" alt="">
+                    </div>
+                    <div class="page-name">页面4</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-container">
+        {% block container %}
+
+        {% endblock %}
+    </div>
+
+    {% block script %}
+
+    {% endblock %}
+</body>
+</html>

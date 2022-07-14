@@ -1,0 +1,141 @@
+/*前台基础CSS*/
+* {
+    padding: 0;
+    margin: 0;
+}
+a {
+    text-decoration: none;
+}
+html {
+    font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu, serif;
+}
+
+ul li {
+    list-style: none;
+}
+
+/*页面内容主体容器*/
+.container {
+    width: 100vw;
+    height: auto;
+}
+
+/*轻微晃动动画*/
+@-webkit-keyframes upAnimation {
+    25% {
+        -webkit-transform: translate(-10px, -10px);
+        transform: translate(-10px, -10px)
+    }
+    50% {
+        -webkit-transform: translate(5px, 8px);
+        transform: translate(5px, 8px)
+    }
+    75% {
+        -webkit-transform: translate(10px, 5px);
+        transform: translate(10px, 5px)
+    }
+}
+
+@keyframes upAnimation {
+    25% {
+        -webkit-transform: translate(-10px, -10px);
+        transform: translate(-10px, -10px);
+    }
+    50% {
+        -webkit-transform: translate(5px, 8px);
+        transform: translate(5px, 8px)
+    }
+    75% {
+        -webkit-transform: translate(10px, 5px);
+        transform: translate(10px, 5px)
+    }
+}
+
+@-webkit-keyframes downAnimation {
+    25% {
+        -webkit-transform: translate(-10px, 10px);
+        transform: translate(-10px, 10px)
+    }
+    50% {
+        -webkit-transform: translate(10px, 10px);
+        transform: translate(10px, 10px)
+    }
+    75% {
+        -webkit-transform: translate(-10px, -10px);
+        transform: translate(-10px, -10px)
+    }
+}
+
+@keyframes downAnimation {
+    25% {
+        -webkit-transform: translate(-10px, 10px);
+        transform: translate(-10px, 10px)
+    }
+    50% {
+        -webkit-transform: translate(10px, 10px);
+        transform: translate(10px, 10px)
+    }
+    75% {
+        -webkit-transform: translate(-10px, -10px);
+        transform: translate(-10px, -10px)
+    }
+}
+
+/*侧边菜单*/
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(33,42,166,.55);
+    width: 115px;
+    border-right: 1px solid rgba(122,244,255,.5);
+    z-index: 999;
+}
+
+.sidebar-container .sidebar-title {
+    font-weight: 700;
+    color: #b7d2ff;
+    text-align: center;
+    flex: none;
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.sidebar-container .sidebar-list {
+    padding-top: 7px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    overflow-y: auto;
+}
+
+.sidebar-container .sidebar-list a {
+    display: inline-block;
+    margin-bottom: 25px;
+}
+
+.sidebar-container .sidebar-list .page-nav {
+    color: #b7d2ff;
+    font-size: 14px;
+}
+
+.sidebar-container .sidebar-list .page-nav .page-logo img{
+    border-radius: 50%;
+    width: 68px;
+    height: 68px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.sidebar-container .sidebar-list .page-nav .page-name {
+    line-height: 18px;
+    height: 18px;
+    min-width: 56px;
+}

@@ -1,0 +1,27 @@
+{% extends "portal/base.html" %}
+{% load static %}
+
+{% block subtitle %}
+    首页
+{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{% block container %}
+    <div class="main-page">
+        <img src="{% static 'images/xinhai.png' %}" alt="" class="character-painting">
+
+        <div class="float-center">
+            <p class="group-title">『 抽卡<span style="font-size: 50px">不歪</span>组</p>
+            <p class="group-title">数据自集成多维可视化平台 』</p>
+            <img src="{% static 'images/keli.png' %}" style="position: absolute;right: 0;bottom: 0;z-index: -1">
+        </div>
+
+{#        <div class="float-random">#}
+{#            <img src="{% static 'images/hutao.png' %}">#}
+{#            <img src="{% static 'images/xiaogong.png' %}">#}
+{#        </div>#}
+    </div>
+{% endblock %}

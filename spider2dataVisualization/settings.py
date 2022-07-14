@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.spider',   # 爬虫 APP
     'apps.visualization',  # 可视化 APP
     'apps.apiv1',  # 可视化 APP
+    'apps.portal',  # 前台 APP
 ]
 
 MIDDLEWARE = [
