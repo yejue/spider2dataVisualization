@@ -17,7 +17,8 @@
 {% endblock %}
 
 {% block script %}
-   <script type="text/javascript">
+    <script type="application/json">{{ distribution_data|safe }}</script>
+    <script type="text/javascript">
        const dom = document.getElementById('container');
        const address_list = [
     {
@@ -67,7 +68,7 @@
         }
     }
     return res;
-};
+    };
     let clearData = function (data)
     {
       let points = [].concat.apply(
@@ -86,7 +87,7 @@
     });
     let app = {};
     let option;
-  myChart.setOption(
+    myChart.setOption(
     (option = {
     tooltip : {
         trigger: 'item'
@@ -171,13 +172,13 @@
 
       ]
     })
-  );
-  // 添加百度地图插件
-  let bmap = myChart.getModel().getComponent('bmap').getBMap();
-  bmap.addControl(new BMap.MapTypeControl());
+    );
+    // 添加百度地图插件
+    let bmap = myChart.getModel().getComponent('bmap').getBMap();
+    bmap.addControl(new BMap.MapTypeControl());
     if (option && typeof option === 'object') {
       myChart.setOption(option);
     }
     window.addEventListener('resize', myChart.resize);
-  </script>
+    </script>
 {% endblock %}
