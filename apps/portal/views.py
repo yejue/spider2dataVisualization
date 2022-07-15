@@ -20,9 +20,6 @@ class HousingPriceDistributionView(View):
     渲染到前端的数据结构大概如下 data
 
     data = {
-        "estate_list": [
-            {"estate_name": "", "lon": float, "lat": float, "avg_price": float, "total_price": float},
-        ],
         "total_price_top10": [
             {"house_name": "", "total_price": float},
         ],
@@ -31,24 +28,26 @@ class HousingPriceDistributionView(View):
         ],
     }
 
+    heatmap_data = [
+        {"coord": [120.14322240845, 30.236064370321], "elevation":21},
+        {"coord": [120.14322240845, 30.236064370321], "elevation":21},
+    ]
+
     """
 
     def get(self, request):
         estate_queryset = models.EstateModel.objects.all()
-        estate_list = []  # 小区信息列表
+        heatmap_list = []  # 小区信息列表
         total_price_top10 = []  # 房子总价前10列表
         unit_price_top10 = []  # 房子每平米单价前10列表
 
         for item in estate_queryset:  # 序列化小区信息
             total_price_avg = models.HouseInfoModel.objects.filter(estate=item).aggregate(Avg("total_price"))
             temp = {
-                "estate_name": item.estate_name,
-                "lon": item.lon,
-                "lat": item.lat,
-                "avg_price": total_price_avg.get("total_price__avg")
+                "coord": [item.lon, item.lat],
+                "elevation": total_price_avg.get("total_price__avg")  # 本小区所有房子的平均价格
             }
-            estate_list.append(temp)
-
+            heatmap_list.append(temp)
         for item in models.HouseInfoModel.objects.all().order_by("-total_price")[:10]:  # 序列化房子总价 top10 信息
             temp = {
                 "house_name": f"{item.estate.estate_name}{item.house_area}平{item.house_type}",
@@ -67,14 +66,16 @@ class HousingPriceDistributionView(View):
             }
             unit_price_top10.append(temp)
 
-        distribution_data = {
-            "estate_list": estate_list,
+        top10_data = {
             "total_price_top10": total_price_top10,
             "unit_price_top10": unit_price_top10,
         }
-        distribution_data = json.dumps(distribution_data, ensure_ascii=False)
+        top10_data = json.dumps(top10_data, ensure_ascii=False)
 
-        return render(self.request, "portal/distribution.html", context={"distribution_data": distribution_data})
+        return render(self.request, "portal/distribution.html", context={
+            "top10_data": top10_data,
+            "heatmap_data": json.dumps(heatmap_list),
+        })
 
 
 class BigViewView(View):
