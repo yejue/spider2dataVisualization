@@ -139,9 +139,9 @@ class LianjiaEstateSpider(LianjiaSpiderAbstract):
             house_district = item.select_one(".bizcircle").text  # 商圈或地区
 
             temp = {
-                "title": title,
+                "estate_name": title,
                 "house_code": house_code,
-                "house_district": house_district
+                "district": house_district
             }
             estate_list.append(temp)
         return estate_list
@@ -164,7 +164,6 @@ class LianjiaEstateSpider(LianjiaSpiderAbstract):
                 req = requests.get(p_url, headers=self.headers)
                 temp_list = self.parse_one_page(req.text)  # 解析出每一页的内容
                 info_list.extend(temp_list)
-
         return info_list
 
 

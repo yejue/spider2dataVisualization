@@ -5,7 +5,6 @@ import logging
 from bs4 import BeautifulSoup
 from django.views import View
 from django.contrib.auth.models import User
-from django.db.models import Q
 
 from spiders import LianjiaEstateSpider, LianjiaSecondHandSpider
 from libs.response import json_response
@@ -76,15 +75,15 @@ class LianJiaEstateSpiderView(View):
         info_list = spider.get_all_estates()  # 获取所有小区信息
 
         for item in info_list:  # 遍历将数据入库
-            district = v_models.DistrictModel.objects.get(district_name=item["house_district"])
+            district = v_models.DistrictModel.objects.get(district_name=item["district"])
+            item["district"] = district
 
-            if v_models.EstateModel.objects.filter(  # 如果出现同一个小区名或房子码相同，则视为同一小区，跳过操作
-                    Q(house_code=item["house_code"]) | Q(estate_name=item["title"])
-            ):
+            if v_models.EstateModel.objects.filter(house_code=item["house_code"]):
+                estate = v_models.EstateModel.objects.get(house_code=item["house_code"])
+                estate.__dict__.update(**item)
+                estate.save()
                 continue
-            estate = v_models.EstateModel(
-                district=district, estate_name=item["title"], house_code=item["house_code"]
-            )
+            estate = v_models.EstateModel(**item)
             estate.save()
         spider_logger.info("链家小区表入库爬虫爬行完毕")
         return json_response()
