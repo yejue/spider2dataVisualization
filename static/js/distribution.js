@@ -28,14 +28,12 @@ let clearData = function (data) {
     return points;
 };
 
-
-
 myChart.setOption(
     (option = {
         tooltip: {
             trigger: 'item',
             formatter: function (top10_data_json) {
-                let tooltip_str = "房屋名字: " + top10_data_json['name'] +
+                let tooltip_str = top10_data_json['name'] +
                     "<br/>户型: " + top10_data_json['data']['value'][4] + "<br/>" +
                     "总面积: " + top10_data_json['data']['value'][5] + " 平方米<br/>" +
                     "总价: " + top10_data_json['data']['value'][2] + " 万";
@@ -127,23 +125,6 @@ myChart.setOption(
     })
 );
 
-/*
-const Bar_option = {
-    tooltip: {
-        formatter: function (val) {
-            let val_str = "房屋名称:" + val['data']['name'] + "</br>" + "价格:" + val['data']['value'] + "万";
-
-            return val_str;
-        }
-    },
-    dataset: {
-        dimensions: ['name', 'value'],
-        source: total_price,
-    },
-    xAxis: {type: 'category'},
-    yAxis: {},
-    series: [{type: 'bar'}]
-};*/
 
 // 添加百度地图插件
 let bmap = myChart.getModel().getComponent('bmap').getBMap();
@@ -152,7 +133,6 @@ bmap.addControl(new BMap.MapTypeControl());
 // 如果已经存在那么不再再次绘制，节省资源。
 if (option && typeof option === 'object') {
     myChart.setOption(option);
-    // myBarChart.setOption(Bar_option);
 }
 
 window.addEventListener('resize', myChart.resize); // 支持浏览器缩放时,图表自适应。
