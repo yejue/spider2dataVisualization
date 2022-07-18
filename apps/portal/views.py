@@ -40,23 +40,39 @@ class HousingPriceDistributionView(View):
 
         # 取得房子总价 top10 相关的条目数据
         top10_queryset = models.HouseInfoModel.objects.all().order_by("-total_price")[:10]
-        top10_coords = []  # top10 的坐标列表
-        top10_values = []  # top10 的总价键值对
+        # top10_coords = []  # top10 的坐标列表
+        # top10_values = []  # top10 的总价键值对
+        top10_convert = []  # convert 之后的格式
 
         for item in top10_queryset:
             if item.estate:  # 有小区的房子正常添加
                 estate = item.estate.estate_name
-                top10_coords.append({estate: [item.estate.lon, item.estate.lat]})
-                top10_values.append({"name": estate, "value": item.total_price})
+                # top10_coords.append({estate: [item.estate.lon, item.estate.lat]})
+                # top10_values.append({"name": estate, "value": item.total_price})
+                top10_convert.append({"name": estate,
+                                      "value": [item.estate.lon,
+                                                item.estate.lat,
+                                                item.total_price,
+                                                item.title,
+                                                item.house_type,
+                                                item.house_area]})
             else:
                 estate = item.title  # 没有小区的使用 title 替代小区名字
-                top10_coords.append({estate: None})  # 没有小区的房子设置坐标为 None
-                top10_values.append({"name": estate, "value": item.total_price})
+                # top10_coords.append({estate: None})  # 没有小区的房子设置坐标为 None
+                # top10_values.append({"name": estate, "value": item.total_price})
+                top10_convert.append({"name": estate,
+                                      "value": [item.estate.lon,
+                                                item.estate.lat,
+                                                item.total_price,
+                                                item.title,
+                                                item.house_type,
+                                                item.house_area]})
 
         return render(self.request, "portal/distribution.html", context={
             "heatmap_data": json.dumps(heatmap_list),
-            "top10_coords": json.dumps(top10_coords),
-            "top10_values": json.dumps(top10_values),
+            # "top10_coords": json.dumps(top10_coords),
+            # "top10_values": json.dumps(top10_values),
+            "top10_convert": json.dumps(top10_convert),
         })
 
 
