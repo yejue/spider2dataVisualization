@@ -26,7 +26,9 @@ class EstateAdmin(BaseAdmin):
 class HouseInfoAdmin(BaseAdmin):
     """房子信息管理类"""
     list_display = ["id", "title", "estate", "house_type", "house_area", "total_price", "house_code"]
-    search_fields = ["title", "house_type", "house_code", "estate__estate_name"]
+    search_fields = [
+        "title", "house_type", "house_code", "estate__estate_name", "estate__district__parent__district_name"
+    ]
 
 
 admin.site.register(CityModel, CityAdmin)

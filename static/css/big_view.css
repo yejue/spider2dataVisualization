@@ -1,0 +1,59 @@
+/*看大的页面 CSS*/
+
+/*图表容器样式*/
+.charts-container {
+    position: relative;
+    width: 100vw;
+    height: auto;
+    opacity: .8;
+}
+
+/*列排列的盒子*/
+.column-box {
+    position: relative;
+    height: 98%;
+    float: right;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+/*线性图表和饼图*/
+#line-chart,
+#pie-chart {
+    background: rgba(255, 255, 255, 0.8);
+    width: 620px;
+    height: 50%;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 3px;
+}
+
+/*地图*/
+#map-chart {
+    background: rgba(255, 255, 255, 0.8);
+    width: 750px;
+    height: 60%;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 3px;
+}
+
+/*行排列的盒子*/
+.row-box {
+    height: 40%;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 3px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+/*福田区和龙岗区折线图*/
+.row-box #ft,
+.row-box #lg {
+    width: 50%;
+    margin-left: 5px;
+}

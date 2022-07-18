@@ -1,2 +1,39 @@
 {% extends "portal/base.html" %}
 {% load static %}
+
+{% block subtitle %}
+    看大的
+{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/big_view.css' %}">
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+{% endblock %}
+
+{% block container %}
+    <div class="charts-container">
+        <div class="column-box">
+            <div id="line-chart"></div>
+            <div id="pie-chart"></div>
+        </div>
+
+        <div class="column-box">
+            <div id="map-chart"></div>
+            <div class="row-box">
+                <div id="ft"></div>
+                <div id="lg"></div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="application/json" id="lineChartData">{{ line_chart_data|safe }}</script>
+    <script type="application/json" id="ftLineChartData">{{ ft_chart_data|safe }}</script>
+    <script type="application/json" id="lgLineChartData">{{ lg_chart_data|safe }}</script>
+    <script type="application/json" id="pieData">{{ pie_data|safe }}</script>
+    <script src="{% static 'js/big_view.js' %}"></script>
+{% endblock %}
+
