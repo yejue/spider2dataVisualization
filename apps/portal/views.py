@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from django.views import View
-from django.db.models import Count, Sum
+from django.db.models import Count, Avg
 
 from apps.visualization import models
 # Create your views here.
@@ -97,11 +97,35 @@ class BigViewView(View):
 
         pie_data.append({"name": "其他", "value": sum_type-cur_sum_type})  # 除被选择的类型外，全部为其他类型
 
+        # 取得地图数据：各区房价均值，其中龙岗和大鹏新区同属于龙岗区
+        map_queryset = models.HouseInfoModel.objects\
+            .values("estate__district__parent__district_name")\
+            .annotate(avg_price=Avg("total_price"))\
+            .order_by("-avg_price")
+
+        map_data = []
+        lg_list = []  # 龙岗区和大鹏新区 item 列表
+
+        for item in map_queryset:
+            if not item["estate__district__parent__district_name"]:  # 跳过没有小区的房子
+                continue
+            if item["estate__district__parent__district_name"] in ["龙岗区", "大鹏新区"]:  # 不在循环处理这两个区
+                lg_list.append(item)
+                continue
+            map_data.append(
+                {"name": item["estate__district__parent__district_name"], "value": "{:.3f}".format(item["avg_price"])}
+            )
+
+        # 将龙岗区和大鹏新区合成为龙岗区
+        avg_price = sum([item["avg_price"] for item in lg_list]) / len(lg_list)
+        map_data.append({"name": "龙岗区", "value": "{:.3f}".format(avg_price)})
+
         return render(self.request, "portal/big_view.html", context={
             "line_chart_data": json.dumps(line_chart_data),
             "lg_chart_data": json.dumps(lg_chart_data),
             "ft_chart_data": json.dumps(ft_chart_data),
             "pie_data": json.dumps(pie_data),
+            "map_data": json.dumps(map_data),
         })
 
 

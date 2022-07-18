@@ -82,7 +82,7 @@ let ftLineChartOption;
 let ftLineChartData = JSON.parse($("#ftLineChartData").text())  // 从 script 标签中获取到线性表的数据
 ftLineChartOption = {
   title: {
-    left: 'center',
+    left: 'left',
     text: '福田区房屋面积与房价'
   },
   tooltip: {
@@ -112,7 +112,7 @@ ftLineChartOption = {
     type: 'value',
     boundaryGap: [0, "100%"],
     axisLabel: {
-      formatter: '{value} 万'
+      formatter: '{value}'
     },
   },
   series: [
@@ -157,8 +157,8 @@ let lgLineChartOption;
 let lgLineChartData = JSON.parse($("#lgLineChartData").text())  // 从 script 标签中获取到线性表的数据
 lgLineChartOption = {
   title: {
-    left: 'center',
-    text: '龙岗区房屋面积与房价'
+    left: 'left',
+    text: '龙岗区房屋面积与房价(不含大鹏)'
   },
   tooltip: {
     trigger: 'axis',
@@ -187,7 +187,7 @@ lgLineChartOption = {
     type: 'value',
     boundaryGap: [0, "100%"],
     axisLabel: {
-      formatter: '{value} 万'
+      formatter: '{value}'
     },
   },
   series: [
@@ -274,8 +274,67 @@ pieOptions = {
   ]
 };
 
+// geo 地图
+let mapDom = document.getElementById('map-chart');
+let mapChart = echarts.init(mapDom);
+let mapData = JSON.parse($("#mapData").text())  // 从 script 标签中获取到线性表的数据
+let mapOption;
+
+mapChart.showLoading();
+$.get('/static/440300_full.json', function (geoJson) {
+  mapChart.hideLoading();
+  echarts.registerMap('深圳', geoJson);
+  mapChart.setOption(
+    (option = {
+      title: {
+        text: '深圳市各区房屋均价',
+        subtitle: "行政区划参考: http://datav.aliyun.com/",
+        sublink: "http://datav.aliyun.com/portal/school/atlas/area_selector#&lat=30.332329214580188&lng=106.72278672066881&zoom=3.5"
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b}<br/> 均价：{c} 万'
+      },
+      toolbox: {
+        show: true,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+          dataView: { readOnly: false },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      visualMap: {
+        min: 0,
+        max: 1000,
+        text: ['High', 'Low'],
+        realtime: false,
+        calculable: true,
+        inRange: {
+          color: ['lightskyblue', 'yellow', 'orangered']
+        }
+      },
+      series: [
+        {
+          name: '深圳',
+          type: 'map',
+          map: '深圳',
+          label: {
+            show: true
+          },
+          data: mapData,
+        }
+      ]
+    })
+  );
+});
+
+
 // 加载所有图表
 lineChartOption && lineChart.setOption(lineChartOption);  // 深圳市总折线图表
 ftLineChartOption && ftLineChart.setOption(ftLineChartOption);  // 福田折线图表
 lgLineChartOption && lgLineChart.setOption(lgLineChartOption);  // 龙岗折线图表
 pieOptions && pieChart.setOption(pieOptions);  // 房屋类型图比例
+mapOption && mapChart.setOption(mapOption);  // geo 地图
