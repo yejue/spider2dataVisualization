@@ -45,6 +45,7 @@ class EstateModel(BaseModel):
     estate_name = models.CharField("小区名", max_length=128, help_text="小区名")
     lon = models.FloatField("经度", null=True, help_text="经度")
     lat = models.FloatField("纬度", null=True, help_text="纬度")
+    avg_price = models.FloatField("参考均价", null=True, help_text="小区房价最近的参考均价")
     house_code = models.CharField("房子编号", max_length=32, unique=True, help_text="房子编号", null=True)
 
     def __str__(self):

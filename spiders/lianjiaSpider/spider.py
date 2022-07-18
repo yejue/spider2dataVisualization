@@ -137,11 +137,16 @@ class LianjiaEstateSpider(LianjiaSpiderAbstract):
             title = item.select_one(".title a").text  # 标题
             house_code = item.get("data-housecode")  # 房子代码
             house_district = item.select_one(".bizcircle").text  # 商圈或地区
+            try:
+                avg_price = float(item.select_one(".totalPrice span").text)  # 参考均价，无参考价则为 None
+            except ValueError:
+                avg_price = None
 
             temp = {
                 "estate_name": title,
                 "house_code": house_code,
-                "district": house_district
+                "district": house_district,
+                "avg_price": avg_price,
             }
             estate_list.append(temp)
         return estate_list
