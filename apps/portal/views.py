@@ -2,7 +2,6 @@ import json
 
 from django.shortcuts import render
 from django.views import View
-from django.db.models import Avg
 
 from apps.visualization import models
 # Create your views here.
@@ -42,10 +41,9 @@ class HousingPriceDistributionView(View):
         unit_price_top10 = []  # 房子每平米单价前10列表
 
         for item in estate_queryset:  # 序列化小区信息
-            total_price_avg = models.HouseInfoModel.objects.filter(estate=item).aggregate(Avg("total_price"))
             temp = {
                 "coord": [item.lon, item.lat],
-                "elevation": total_price_avg.get("total_price__avg")  # 本小区所有房子的平均价格
+                "elevation": item.avg_price  # 本小区所有房子的平均价格
             }
             heatmap_list.append(temp)
         for item in models.HouseInfoModel.objects.all().order_by("-total_price")[:10]:  # 序列化房子总价 top10 信息
@@ -58,8 +56,14 @@ class HousingPriceDistributionView(View):
             total_price_top10.append(temp)
 
         for item in models.HouseInfoModel.objects.all().order_by("-unit_price")[:10]:  # 序列化房子单价 top10 信息
+
+            if item.estate:
+                estate_name = item.estate.estate_name
+            else:
+                estate_name = ""
+
             temp = {
-                "house_name": f"{item.estate.estate_name}{item.house_area}平{item.house_type}",
+                "house_name": f"{estate_name}{item.house_area}平{item.house_type}",
                 "house_type": item.house_type,
                 "house_area": item.house_area,
                 "unit_price": item.unit_price,
