@@ -40,6 +40,14 @@ myChart.setOption(
                 return tooltip_str;//只支持h5形式的显示
             },
         },
+        title: {
+            left: "200px",
+            top: "20px",
+            text: "深圳市房价分布态势",
+            textStyle: {
+                fontSize: 30,
+            },
+        },
         animation: false,
         bmap: {
             center: [114.123611,22.537961],  // 深圳站坐标
