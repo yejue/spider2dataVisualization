@@ -17,16 +17,7 @@ class IndexView(View):
 class HousingPriceDistributionView(View):
     """房价分布页视图
 
-    渲染到前端的数据结构大概如下 data
-
-    data = {
-        "total_price_top10": [
-            {"house_name": "", "total_price": float},
-        ],
-        "unit_price_top10": [
-            {"house_name": "", "unit_price": float},
-        ],
-    }
+    渲染到前端的数据结构大概如下
 
     heatmap_data = [
         {"coord": [120.14322240845, 30.236064370321], "elevation":21},
@@ -36,50 +27,36 @@ class HousingPriceDistributionView(View):
     """
 
     def get(self, request):
+        # 序列化热力图相关数据
         estate_queryset = models.EstateModel.objects.all()
         heatmap_list = []  # 小区信息列表
-        total_price_top10 = []  # 房子总价前10列表
-        unit_price_top10 = []  # 房子每平米单价前10列表
 
         for item in estate_queryset:  # 序列化小区信息
             temp = {
                 "coord": [item.lon, item.lat],
-                "elevation": item.avg_price  # 本小区所有房子的平均价格
+                "elevation": item.avg_price  # 本小区房子的平均价格(当前使用的是参考均价)
             }
             heatmap_list.append(temp)
-        for item in models.HouseInfoModel.objects.all().order_by("-total_price")[:10]:  # 序列化房子总价 top10 信息
-            temp = {
-                "house_name": f"{item.estate.estate_name}{item.house_area}平{item.house_type}",
-                "house_type": item.house_type,
-                "house_area": item.house_area,
-                "total_price": item.total_price,
-            }
-            total_price_top10.append(temp)
 
-        for item in models.HouseInfoModel.objects.all().order_by("-unit_price")[:10]:  # 序列化房子单价 top10 信息
+        # 取得房子总价 top10 相关的条目数据
+        top10_queryset = models.HouseInfoModel.objects.all().order_by("-total_price")[:10]
+        top10_coords = []  # top10 的坐标列表
+        top10_values = []  # top10 的总价键值对
 
-            if item.estate:
-                estate_name = item.estate.estate_name
+        for item in top10_queryset:
+            if item.estate:  # 有小区的房子正常添加
+                estate = item.estate.estate_name
+                top10_coords.append({estate: [item.estate.lon, item.estate.lat]})
+                top10_values.append({"name": estate, "value": item.total_price})
             else:
-                estate_name = ""
-
-            temp = {
-                "house_name": f"{estate_name}{item.house_area}平{item.house_type}",
-                "house_type": item.house_type,
-                "house_area": item.house_area,
-                "unit_price": item.unit_price,
-            }
-            unit_price_top10.append(temp)
-
-        top10_data = {
-            "total_price_top10": total_price_top10,
-            "unit_price_top10": unit_price_top10,
-        }
-        top10_data = json.dumps(top10_data, ensure_ascii=False)
+                estate = item.title  # 没有小区的使用 title 替代小区名字
+                top10_coords.append({estate: None})  # 没有小区的房子设置坐标为 None
+                top10_values.append({"name": estate, "value": item.total_price})
 
         return render(self.request, "portal/distribution.html", context={
-            "top10_data": top10_data,
             "heatmap_data": json.dumps(heatmap_list),
+            "top10_coords": json.dumps(top10_coords),
+            "top10_values": json.dumps(top10_values),
         })
 
 

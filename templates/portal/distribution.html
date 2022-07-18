@@ -19,7 +19,8 @@
 {% endblock %}
 
 {% block script %}
-    <script type="application/json" id="top10-data">{{ top10_data|safe }}</script>
+    <script type="application/json" id="top10_coords">{{ top10_coords|safe }}</script>
+    <script type="application/json" id="top10_values">{{ top10_values|safe }}</script>
     <script type="application/json" id="heatmap-data">{{ heatmap_data|safe }}</script>
     <script type="text/javascript" src="{% static 'js/distribution.js' %}"></script>
 {% endblock %}
