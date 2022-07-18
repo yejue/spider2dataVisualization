@@ -81,7 +81,7 @@ myChart.setOption(
         },
         animation: false,
         bmap: {
-            center: [114.063836, 22.543884],  // 福田站坐标
+            center: [114.123611,22.537961],  // 深圳站坐标
             zoom: 12,
             roam: true
         },
