@@ -1,0 +1,47 @@
+/*可视化视频页面 CSS*/
+
+/*视频容器*/
+.video-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.video-container .video-box {
+    position: relative;
+    margin: auto;
+    padding: 15px;
+    width: 70%;
+}
+
+.video-container .video-box .title {
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: 400;
+    color: rgba(94, 84, 84, 0.75);
+    cursor: pointer;
+    text-shadow: 1px 1px black;
+    margin-bottom: 30px;
+}
+
+.video-container .video-box .video-list {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.video-container .video-box .video-list .video-item {
+    width: 340px;
+    overflow: hidden;
+}
+
+.video-container .video-box .video-list .video-item video{
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 3px;
+}
+.video-container .video-box .video-list .video-item p {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(35, 34, 34, 0.76);
+}

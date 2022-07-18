@@ -1,2 +1,24 @@
 {% extends "portal/base.html" %}
 {% load static %}
+
+{% block subtitle %}
+    可视化媒体
+{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/video_list.css' %}">
+{% endblock %}
+
+{% block container %}
+    <div class="video-container">
+        <div class="video-box">
+            <div class="title">可视化媒体</div>
+            <div class="video-list">
+                <div class="video-item">
+                    <video src="{% static 'video/housing_prices_top100.mp4' %}" controls></video>
+                    <p>深圳市房子总价 top100 动态排名 （数据截至 2022.7.18）</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
