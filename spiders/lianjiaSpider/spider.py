@@ -1,8 +1,12 @@
-import json
 import re
+import json
+import time
+
 import requests
 import asyncio
 import aiohttp
+
+from random import randint
 from bs4 import BeautifulSoup
 from . import constants
 
@@ -114,6 +118,7 @@ class LianjiaSecondHandSpider(LianjiaSpiderAbstract):
         for url in url_list:
             req = requests.get(url, headers=self.headers)
             temp_list = self.parse_one_page(req.text)  # 获取每一页解析出来的结果
+            time.sleep(randint(1, 10) / 10)  # 随机休眠 0.1 ~ 1 秒
             print(f"[INFO] 正在爬行: {url}, 获取到数量：{len(temp_list)}")
             yield temp_list
 
