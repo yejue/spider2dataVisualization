@@ -48,12 +48,7 @@ class HousingPriceDistributionView(View):
                 top10_convert.append({
                     "name": estate,
                     "value": [
-                        item.estate.lon,
-                        item.estate.lat,
-                        item.total_price,
-                        item.title,
-                        item.house_type,
-                        item.house_area
+                        item.estate.lon, item.estate.lat, item.total_price, item.title, item.house_type, item.house_area
                     ]
                 })
             else:
@@ -61,12 +56,7 @@ class HousingPriceDistributionView(View):
                 top10_convert.append({
                     "name": estate,
                     "value": [
-                        item.estate.lon,
-                        item.estate.lat,
-                        item.total_price,
-                        item.title,
-                        item.house_type,
-                        item.house_area
+                        None, None, item.total_price, item.title, item.house_type, item.house_area
                     ]
                 })
 
