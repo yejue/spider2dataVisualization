@@ -67,7 +67,7 @@ python3.10、ubuntu2204
             "subdomain": "https://aq.lianjia.com/",
             "created_by": 1
         }
-    ],
+    ]
 }
 ```
 
@@ -471,7 +471,7 @@ class CityModel(BaseModel):
 | district_name | string     | 辖区名，辖区或者是某区域， unique 约束。 | 无   |
 | lon           | float      | 经度                                     | 无   |
 | lat           | float      | 纬度                                     | 无   |
-|               |            |                                          |      |
+
 
 ```python
 class DistrictModel(BaseModel):
@@ -524,8 +524,8 @@ class EstateModel(BaseModel):
 ```
 #### 6.1.4 房子信息表
 
-| 字段名      | 类型       | 描述                                   | 默认 |
-| ----------- | ---------- | -------------------------------------- | ---- |
+| 字段名      | 类型       | 描述                                   | 默认  |
+| ----------- | ---------- | -------------------------------------- |-----|
 | title       | string     | 链家二手房商品的描述                   | 无   |
 | house_code  | string     | 房子编号                               | 无   |
 | location    | string     | 大概的位置，最低层次的位置信息         | 无   |
@@ -533,7 +533,7 @@ class EstateModel(BaseModel):
 | house_area  | float      | 房子面积                               | 无   |
 | total_price | float      | 房子总价，单位是万                     | 无   |
 | unit_price  | 单价       | 每单位价格                             | 无   |
-| estate      | ForeignKey | 外键约束，房子信息表是小区表的一个从表 |      |
+| estate      | ForeignKey | 外键约束，房子信息表是小区表的一个从表 | 无   |
 
 ```python
 class HouseInfoModel(BaseModel):
