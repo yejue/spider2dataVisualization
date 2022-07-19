@@ -4,17 +4,19 @@ python3.10、ubuntu2204
 
 （python 最低需要 python3.8）
 
-**附注：本项目使用数据库为MySQL，路径为 /db.sqlite3**
+**附注：本项目使用数据库为MySQL，详细配置见：spider2dataVisualization/settings.py**
 
 ## 二、快速启动
 
 1. 克隆本项目
-2. 安装所有的依赖包,  pip install -r requirements.txt
+2. 安装所有的依赖包,  $ pip install -r requirements.txt $
 3. 创建数据库 ”spider2dataVisualization“
 4. 配置 spider2dataVisualization/settings.py 的 DATABASES
-5. python manage.py migrate
-6. 将示例.sql 导入数据库 spider2dataVisualization ，在 templates/ 路径下放入 global.env
-7. python manage.py runserver 0:8000
+5. 根据 model.py 创建新的迁移 $ python manage.py makemigrations $
+6. 执行迁移 $ python manage.py migrate $
+7. 在根目录路径下放入 global.env 和示例.sql ,将示例.sql 导入数据库 spider2dataVisualization
+8. 启动Django $ python manage.py runserver 0:8000 $
+9. 在浏览器访问  ip 地址:8000 即可运行本项目。
 
 ## 三、接口设计
 
@@ -64,7 +66,8 @@ python3.10、ubuntu2204
             "city_name": "安庆",
             "subdomain": "https://aq.lianjia.com/",
             "created_by": 1
-        },],
+        }
+    ],
 }
 ```
 
@@ -85,7 +88,7 @@ python3.10、ubuntu2204
 
 | 名称 | 必须性 | 类型    | 描述          | 默认值 |
 | ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id |        |
+| id   | 是     | integer | 数据库中的 id | 1      |
 
 返回参数说明：
 
@@ -156,7 +159,9 @@ python3.10、ubuntu2204
             "lat": null,
             "city": 19,
             "parent": null
-        }]}
+        }
+    ]
+}
 ```
 
 #### 3.4 辖区信息详情接口
@@ -176,7 +181,7 @@ python3.10、ubuntu2204
 
 | 名称 | 必须性 | 类型    | 描述          | 默认值 |
 | ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id |        |
+| id   | 是     | integer | 数据库中的 id | 无     |
 
 返回参数说明：
 
@@ -251,7 +256,8 @@ python3.10、ubuntu2204
             "avg_price": 59700.0,
             "house_code": "2411048928212",
             "district": 107
-        },]
+        }
+    ]
  }
 ```
 
@@ -273,7 +279,7 @@ python3.10、ubuntu2204
 
 | 名称 | 必须性 | 类型    | 描述          | 默认值 |
 | ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id |        |
+| id   | 是     | integer | 数据库中的 id | 无     |
 
 返回参数说明：
 
@@ -351,7 +357,8 @@ python3.10、ubuntu2204
             "unit_price": 59900.0,
             "estate": 5778,
             "created_by": 1
-        },]
+        }
+    ]
 }
 ```
 
@@ -373,7 +380,7 @@ python3.10、ubuntu2204
 
 | 名称 | 必须性 | 类型    | 描述          | 默认值 |
 | ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id |        |
+| id   | 是     | integer | 数据库中的 id | 无     |
 
 返回参数说明：
 
@@ -411,17 +418,17 @@ python3.10、ubuntu2204
 | -1     | UNKNOWN_ERR 未知错误                           |
 | 5001   | CONNECT_ERR 连接错误，多出现为代理连接异常     |
 
-##  五、爬虫任务
+##  五、数据集成任务
 
-1. 爬取小区坐标数据
+1. 集成小区坐标数据
 
    `python manage.py getEstateCoords` 
 
-2. 爬取链家小区数据
+2. 集成链家小区数据
 
    `python manage.py getLianjiaEstate`
 
-3. 爬取链家二手房数据
+3. 集成链家二手房数据
 
    `python manage.py getLianjiaSecondHand`
 
@@ -432,9 +439,9 @@ python3.10、ubuntu2204
 
 | 字段名     | 类型   | 描述                           | 默认 |
 | ---------- | ------ | ------------------------------ | ---- |
-| city_name  | string | 城市名, unique 约束。          |      |
-| subdomain  | url    | 子域名链接,通向某城市链家网站. |      |
-| created_by | string | 创建者                         |      |
+| city_name  | string | 城市名, unique 约束。          | 无   |
+| subdomain  | url    | 子域名链接,通向某城市链家网站. | 无   |
+| created_by | string | 创建者                         | 无   |
 
 ```python
 class CityModel(BaseModel):
@@ -459,11 +466,11 @@ class CityModel(BaseModel):
 
 | 字段名        | 类型       | 描述                                     | 默认 |
 | ------------- | ---------- | ---------------------------------------- | ---- |
-| city          | ForeignKey | 外键约束，辖区表是城市表的一个从表       |      |
-| parent        | ForeignKey |                                          |      |
-| district_name | string     | 辖区名，辖区或者是某区域， unique 约束。 |      |
-| lon           | float      | 经度                                     |      |
-| lat           | float      | 纬度                                     |      |
+| city          | ForeignKey | 外键约束，辖区表是城市表的一个从表       | 无   |
+| parent        | ForeignKey |                                          | 无   |
+| district_name | string     | 辖区名，辖区或者是某区域， unique 约束。 | 无   |
+| lon           | float      | 经度                                     | 无   |
+| lat           | float      | 纬度                                     | 无   |
 |               |            |                                          |      |
 
 ```python
@@ -489,12 +496,12 @@ class DistrictModel(BaseModel):
 
 | 字段名      | 类型       | 描述                               | 默认 |
 | ----------- | ---------- | ---------------------------------- | ---- |
-| district    | ForeignKey | 外键约束，小区表是辖区表的一个从表 |      |
-| estate_name | string     | 小区名                             |      |
-| lon         | float      | 经度                               |      |
-| lat         | float      | 纬度                               |      |
-| avg_price   | float      | 参考均价                           |      |
-| house_code  | string     | 房子编号                           |      |
+| district    | ForeignKey | 外键约束，小区表是辖区表的一个从表 | 无   |
+| estate_name | string     | 小区名                             | 无   |
+| lon         | float      | 经度                               | 无   |
+| lat         | float      | 纬度                               | 无   |
+| avg_price   | float      | 参考均价                           | 无   |
+| house_code  | string     | 房子编号                           | 无   |
 
 ```python
 class EstateModel(BaseModel):
@@ -519,13 +526,13 @@ class EstateModel(BaseModel):
 
 | 字段名      | 类型       | 描述                                   | 默认 |
 | ----------- | ---------- | -------------------------------------- | ---- |
-| title       | string     | 链家二手房商品的描述                   |      |
-| house_code  | string     | 房子编号                               |      |
-| location    | string     | 大概的位置，最低层次的位置信息         |      |
-| house_type  | string     | 户型，二手房的户型，例如xx室xx厅。     |      |
-| house_area  | float      | 房子面积                               |      |
-| total_price | float      | 房子总价，单位是万                     |      |
-| unit_price  | 单价       | 每单位价格                             |      |
+| title       | string     | 链家二手房商品的描述                   | 无   |
+| house_code  | string     | 房子编号                               | 无   |
+| location    | string     | 大概的位置，最低层次的位置信息         | 无   |
+| house_type  | string     | 户型，二手房的户型，例如xx室xx厅。     | 无   |
+| house_area  | float      | 房子面积                               | 无   |
+| total_price | float      | 房子总价，单位是万                     | 无   |
+| unit_price  | 单价       | 每单位价格                             | 无   |
 | estate      | ForeignKey | 外键约束，房子信息表是小区表的一个从表 |      |
 
 ```python
