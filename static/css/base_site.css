@@ -140,3 +140,9 @@ ul li{
 .up-animated {
     animation: upAnimation 4s linear infinite;
 }
+
+/*设置全局表单填充的内容样式*/
+.content {
+    background: #fff;
+    opacity: 0.85;
+}
