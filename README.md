@@ -9,13 +9,13 @@ python3.10、ubuntu2204
 ## 二、快速启动
 
 1. 克隆本项目
-2. 安装所有的依赖包,  $ pip install -r requirements.txt $
+2. 安装所有的依赖包,  ` pip install -r requirements.txt `
 3. 创建数据库 ”spider2dataVisualization“
 4. 配置 spider2dataVisualization/settings.py 的 DATABASES
-5. 根据 model.py 创建新的迁移 $ python manage.py makemigrations $
-6. 执行迁移 $ python manage.py migrate $
+5. 根据 model.py 创建新的迁移 ` python manage.py makemigrations `
+6. 执行迁移 ` python manage.py migrate `
 7. 在根目录路径下放入 global.env 和示例.sql ,将示例.sql 导入数据库 spider2dataVisualization
-8. 启动Django $ python manage.py runserver 0:8000 $
+8. 启动Django ` python manage.py runserver 0:8000 `
 9. 在浏览器访问  ip 地址:8000 即可运行本项目。
 
 ## 三、接口设计
