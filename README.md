@@ -542,18 +542,7 @@ python3.10、ubuntu2204
 
 
 ##  五、数据集成任务
-
-1. 集成小区坐标数据
-
-   `python manage.py getEstateCoords` 
-
-2. 集成链家小区数据
-
-   `python manage.py getLianjiaEstate`
-
-3. 集成链家二手房数据
-
-   `python manage.py getLianjiaSecondHand`
+pass
 
 ## 六、链家二手房爬虫描述
 
