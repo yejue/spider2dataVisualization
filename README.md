@@ -41,12 +41,12 @@ python3.10、ubuntu2204
 
 返回参数说明:
 
-| 名称     | 类型    | 说明               |
-| -------- | ------- | ------------------ |
-| previous | string  | 上一页的结果的 url |
-| next     | string  | 下一页结果的 url   |
-| results  | list    | 搜索结果数据列表   |
-| count    | integer | 总的结果数量       |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -54,10 +54,9 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "count": 154,
-    "next": "http://192.168.15.132:8000/api/city_list/?page=2",
-    "previous": null,
-    "results": [
+    "result_code": "200",
+    "message": "成功",
+    "data": [
         {
             "id": 1,
             "create_time": "2022-07-08T12:56:22.128571+08:00",
@@ -65,8 +64,9 @@ python3.10、ubuntu2204
             "city_name": "安庆",
             "subdomain": "https://aq.lianjia.com/",
             "created_by": 1
-        }
-    ]
+        },
+    ],
+    "total_count": 154
 }
 ```
 
@@ -77,23 +77,29 @@ python3.10、ubuntu2204
 
 请求方式：get
 
-请求示例：/api/city_list/1/
+请求示例：/api/city_list/?city_name=安庆
 
-接口备注： 城市信息详情接口。可使用 id 查询某一条目详情。暂无过滤参数。
+接口备注： 城市信息详情接口。支持使用对应模型库字段参数过滤。
 
 ------
 
 参数说明：
 
-| 名称 | 必须性 | 类型    | 描述          | 默认值 |
-| ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id | 1      |
+| 名称      | 必须性 | 类型     | 描述                 | 默认值 |
+| --------- | ------ | -------- | -------------------- | ------ |
+| city_name | 是     | string   | 数据库中的城市名字段 | 无     |
+| id        | 否     | interger | 数据库中的 id        | 无     |
+| subdomain | 否     | string   | 城市链家网址         | 无     |
+|           |        |          |                      |        |
 
 返回参数说明：
 
-| 名称    | 类型 | 说明             |
-| ------- | ---- | ---------------- |
-| results | list | 搜索结果数据列表 |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -101,12 +107,19 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "id": 1,
-    "create_time": "2022-07-08T12:56:22.128571+08:00",
-    "update_time": "2022-07-08T12:56:22.128617+08:00",
-    "city_name": "安庆",
-    "subdomain": "https://aq.lianjia.com/",
-    "created_by": 1
+    "result_code": "200",
+    "message": "成功",
+    "data": [
+        {
+            "id": 1,
+            "create_time": "2022-07-08T12:56:22.128571+08:00",
+            "update_time": "2022-07-08T12:56:22.128617+08:00",
+            "city_name": "安庆",
+            "subdomain": "https://aq.lianjia.com/",
+            "created_by": 1
+        }
+    ],
+    "total_count": 1
 }
 ```
 
@@ -132,12 +145,12 @@ python3.10、ubuntu2204
 
 返回参数说明:
 
-| 名称     | 类型    | 说明               |
-| -------- | ------- | ------------------ |
-| previous | string  | 上一页的结果的 url |
-| next     | string  | 下一页结果的 url   |
-| results  | list    | 搜索结果数据列表   |
-| count    | integer | 总的结果数量       |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -145,10 +158,9 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "count": 99,
-    "next": "http://192.168.15.132:8000/api/district_list/?page=2",
-    "previous": null,
-    "results": [
+    "result_code": "200",
+    "message": "成功",
+    "data": [
         {
             "id": 106,
             "create_time": "2022-07-08T17:25:17.501857+08:00",
@@ -157,9 +169,10 @@ python3.10、ubuntu2204
             "lon": null,
             "lat": null,
             "city": 19,
-            "parent": null
+            "parent": null,
         }
-    ]
+    ],
+    "total_count": 99
 }
 ```
 
@@ -170,23 +183,29 @@ python3.10、ubuntu2204
 
 请求方式：get
 
-请求示例：/api/district_list/
+请求示例：/api/district_list/?district_name=罗湖区
 
-接口备注： 辖区信息详情接口。可使用 id 查询某一条目详情。暂无过滤参数。
+接口备注： 辖区信息详情接口。支持使用对应模型库字段参数过滤。
 
 ------
 
 参数说明：
 
-| 名称 | 必须性 | 类型    | 描述          | 默认值 |
-| ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id | 无     |
+| 名称          | 必须性 | 类型     | 描述                   | 默认值 |
+| ------------- | ------ | -------- | ---------------------- | ------ |
+| district_name | 是     | string   | 数据库中的辖区名字段   | 无     |
+| city          | 否     | interger | 数据库中对应的城市编号 | 无     |
+| id            | 否     | interger | 数据库中的 id          | 无     |
 
 返回参数说明：
 
-| 名称    | 类型 | 说明             |
-| ------- | ---- | ---------------- |
-| results | list | 搜索结果数据列表 |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
+|             |         |                              |
 
 返回参数示例:
 
@@ -194,14 +213,21 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "id": 1,
-    "create_time": "2022-07-08T17:25:17.501857+08:00",
-    "update_time": "2022-07-08T17:25:17.501913+08:00",
-    "district_name": "罗湖区",
-    "lon": null,
-    "lat": null,
-    "city": 19,
-    "parent": null
+    "result_code": "200",
+    "message": "成功",
+    "data": [
+        {
+            "id": 106,
+            "create_time": "2022-07-08T17:25:17.501857+08:00",
+            "update_time": "2022-07-08T17:25:17.501913+08:00",
+            "district_name": "罗湖区",
+            "lon": null,
+            "lat": null,
+            "city": 19,
+            "parent": null,
+        }
+    ],
+    "total_count": 5148
 }
 ```
 
@@ -228,12 +254,12 @@ python3.10、ubuntu2204
 
 返回参数说明:
 
-| 名称     | 类型    | 说明               |
-| -------- | ------- | ------------------ |
-| previous | string  | 上一页的结果的 url |
-| next     | string  | 下一页结果的 url   |
-| results  | list    | 搜索结果数据列表   |
-| count    | integer | 总的结果数量       |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -241,23 +267,21 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "count": 5148,
-    "next": "http://192.168.15.132:8000/api/estate_list/?page=2",
-    "previous": null,
-    "results": [
+    "result_code": "200",
+    "message": "成功",
+    "data": [
         {
             "id": 5774,
-            "create_time": "2022-07-08T20:48:16.473009+08:00",
-            "update_time": "2022-07-18T17:09:40.611120+08:00",
+            "district_id": 107,
             "estate_name": "阳光绿地家园",
             "lon": 114.14319731616294,
             "lat": 22.569812821078028,
             "avg_price": 59700.0,
-            "house_code": "2411048928212",
-            "district": 107
+            "house_code": "2411048928212"
         }
-    ]
- }
+    ],
+    "total_count": 5148
+}
 ```
 
 
@@ -270,21 +294,26 @@ python3.10、ubuntu2204
 
 请求示例：/api/estate_list/1/
 
-接口备注： 城市信息详情接口。可使用 id 查询某一条目详情。暂无过滤参数。
+接口备注： 城市信息详情接口。支持使用对应模型库字段参数过滤。
 
 ------
 
 参数说明：
 
-| 名称 | 必须性 | 类型    | 描述          | 默认值 |
-| ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id | 无     |
+| 名称        | 必须性 | 类型    | 描述                 | 默认值 |
+| ----------- | ------ | ------- | -------------------- | ------ |
+| estate_name | 是     | string  | 数据库中的小区名字段 | 无     |
+| id          | 否     | integer | 数据库中的 id        | 无     |
+| house_code  | 否     | string  | 数据库中的小区id字段 | 无     |
 
 返回参数说明：
 
-| 名称    | 类型 | 说明             |
-| ------- | ---- | ---------------- |
-| results | list | 搜索结果数据列表 |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -292,15 +321,20 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "id": 1,
-    "create_time": "2022-07-08T20:48:16.473009+08:00",
-    "update_time": "2022-07-18T17:09:40.611120+08:00",
-    "estate_name": "阳光绿地家园",
-    "lon": 114.14319731616294,
-    "lat": 22.569812821078028,
-    "avg_price": 59700.0,
-    "house_code": "2411048928212",
-    "district": 107
+    "result_code": "200",
+    "message": "成功",
+    "data": [
+        {
+            "id": 5774,
+            "district_id": 107,
+            "estate_name": "阳光绿地家园",
+            "lon": 114.14319731616294,
+            "lat": 22.569812821078028,
+            "avg_price": 59700.0,
+            "house_code": "2411048928212"
+        }
+    ],
+    "total_count": 1
 }
 ```
 
@@ -326,12 +360,12 @@ python3.10、ubuntu2204
 
 返回参数说明:
 
-| 名称     | 类型    | 说明               |
-| -------- | ------- | ------------------ |
-| previous | string  | 上一页的结果的 url |
-| next     | string  | 下一页结果的 url   |
-| results  | list    | 搜索结果数据列表   |
-| count    | integer | 总的结果数量       |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -339,10 +373,9 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "count": 23311,
-    "next": "http://192.168.15.132:8000/api/house_info_list/?page=2",
-    "previous": null,
-    "results": [
+    "result_code": "200",
+    "message": "成功",
+    "data": [
         {
             "id": 2874,
             "create_time": "2022-07-08T23:00:27.767926+08:00",
@@ -357,7 +390,8 @@ python3.10、ubuntu2204
             "estate": 5778,
             "created_by": 1
         }
-    ]
+    ],
+    "total_count": 23311
 }
 ```
 
@@ -369,23 +403,30 @@ python3.10、ubuntu2204
 
 请求方式：get
 
-请求示例：/api/house_info_list/1/
+请求示例：/api/house_info_list/?house_code=105110791655
 
-接口备注： 房子信息详情接口。可使用 id 查询某一条目详情。暂无过滤参数。
+接口备注： 房子信息详情接口。支持使用对应模型库字段参数过滤。
 
 ------
 
 参数说明：
 
-| 名称 | 必须性 | 类型    | 描述          | 默认值 |
-| ---- | ------ | ------- | ------------- | ------ |
-| id   | 是     | integer | 数据库中的 id | 无     |
+| 名称       | 必须性 | 类型    | 描述                         | 默认值 |
+| ---------- | ------ | ------- | ---------------------------- | ------ |
+| house_code | 是     | string  | 数据库中对应的房子id编号     | 无     |
+| id         | 否     | integer | 数据库中的 id                | 无     |
+| title      | 否     | string  | 数据库中对应的二手房售卖标题 | 无     |
+| house_type | 否     | string  | 数据库中对应的房子户型       | 无     |
+| location   | 否     | string  | 数据库中对应房子的位置       | 无     |
 
 返回参数说明：
 
-| 名称    | 类型 | 说明             |
-| ------- | ---- | ---------------- |
-| results | list | 搜索结果数据列表 |
+| 名称        | 类型    | 说明                         |
+| ----------- | ------- | ---------------------------- |
+| result_code | string  | 返回状态码                   |
+| message     | string  | 状态码对应信息，或自定义信息 |
+| data        | list    | 搜索结果数据列表             |
+| total_count | integer | 总的结果数量                 |
 
 返回参数示例:
 
@@ -393,24 +434,74 @@ python3.10、ubuntu2204
 
 ```python
 {
-    "id": 2874,
-    "create_time": "2022-07-08T23:00:27.767926+08:00",
-    "update_time": "2022-07-08T23:00:27.768010+08:00",
-    "title": "此房满五唯一，税费少，阳光充足，东南向，诚心出售",
-    "house_code": "105110791655",
-    "location": "百仕达",
-    "house_type": "2室1厅",
-    "house_area": 72.16,
-    "total_price": 433.0,
-    "unit_price": 59900.0,
-    "estate": 5778,
-    "created_by": 1
+    "result_code": "200",
+    "message": "成功",
+    "data": [
+        {
+            "id": 2874,
+            "create_time": "2022-07-08T23:00:27.767926+08:00",
+            "update_time": "2022-07-08T23:00:27.768010+08:00",
+            "title": "此房满五唯一，税费少，阳光充足，东南向，诚心出售",
+            "house_code": "105110791655",
+            "location": "百仕达",
+            "house_type": "2室1厅",
+            "house_area": 72.16,
+            "total_price": 433.0,
+            "unit_price": 59900.0,
+            "estate": 5778,
+            "created_by": 1
+        }
+    ],
+    "total_count": 1
 }
 ```
 
 ## 四、功能接口
 
-pass
+**注意，四个功能接口请按照顺序使用，才可正确集成数据录入对应的数据表。**
+
+### 4.1 集成添加城市数据功能接口
+使用方法：使用命令 ` python manage.py runserver 0:8000 ` 启动本项目之后，在任意浏览器中访问
+ip:8000/visualization/add_city/ ,然后等待录入结束，页面弹出以下信息即可。
+
+```python
+{
+    "result_code": "200",
+    "message": "成功",
+    "data": null
+}
+```
+### 4.2 集成添加辖区数据功能接口
+使用方法：使用命令 ` python manage.py runserver 0:8000 ` 启动本项目和上述城市数据录入完毕之后，在任意浏览器中访问 ip:8000/visualization/add_district/ ,然后等待录入结束，页面弹出以下信息即可。
+
+```python
+{
+    "result_code": "200",
+    "message": "成功",
+    "data": null
+}
+```
+### 4.3 集成添加小区数据功能接口
+使用方法：使用命令 ` python manage.py runserver 0:8000 ` 启动本项目和上述辖区数据录入完毕之后，在任意浏览器中访问 ip:8000/visualization/add_estate/ ,然后等待录入结束，页面弹出以下信息即可。
+
+```python
+{
+    "result_code": "200",
+    "message": "成功",
+    "data": null
+}
+```
+### 4.4 集成添加房屋信息数据功能接口
+使用方法：使用命令 ` python manage.py runserver 0:8000 `启动本项目和上述小区数据录入完毕之后，在任意浏览器中访问 ip:8000/visualization/add_data/ ,然后等待录入结束，页面弹出以下信息即可。
+
+```python
+{
+    "result_code": "200",
+    "message": "成功",
+    "data": null
+}
+```
+
 
 ##  五、数据集成任务
 
