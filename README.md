@@ -10,15 +10,14 @@ python3.10、ubuntu2204
 
 1. 克隆本项目
 2. 安装所有的依赖包,  ` pip install -r requirements.txt `
-3. 创建数据库 ”spider2dataVisualization“
-4. 配置 spider2dataVisualization/settings.py 的 DATABASES
-5. 根据 model.py 创建新的迁移 ` python manage.py makemigrations `
-6. 执行迁移 ` python manage.py migrate `
-7. 在根目录路径下放入 global.env 和示例.sql ,将示例.sql 导入数据库 spider2dataVisualization
-8. 启动Django ` python manage.py runserver 0:8000 `
-9. 在浏览器访问  ip 地址:8000 即可运行本项目。
+3. 创建数据库 “spider2dataVisualization”，并配置 spider2dataVisualization/settings.py 的 DATABASES
+4. 创建迁移 ` python manage.py makemigrations `
+5. 执行迁移 ` python manage.py migrate `
+6. 可以选择将示例 .sql 数据导入到数据库中，也可以选择依次执行城市、辖区、小区、房子、辖区坐标，小区坐标这六个功能接口
+7. 按照 global.env 内提示配置两个百度地图 access key
+8. 使用命令启动 ` python manage.py runserver 0:8000 `，在任意浏览器访问  ip 地址:8000 即可
 
-## 三、接口设计
+## 三、信息接口
 
 ####  3.1 城市信息列表
 
@@ -409,14 +408,9 @@ python3.10、ubuntu2204
 }
 ```
 
-## 四、暂定错误码
+## 四、功能接口
 
-| 错误码 | 描述                                           |
-| ------ | ---------------------------------------------- |
-| 200    | OK                                             |
-| 4001   | PARAM_ERR 传入的参数值错误，多出现于值类型错误 |
-| -1     | UNKNOWN_ERR 未知错误                           |
-| 5001   | CONNECT_ERR 连接错误，多出现为代理连接异常     |
+pass
 
 ##  五、数据集成任务
 
@@ -558,3 +552,12 @@ class HouseInfoModel(BaseModel):
         verbose_name = "房子信息表"
         verbose_name_plural = verbose_name
 ```
+
+## 七、暂定错误码
+
+| 错误码 | 描述                                           |
+| ------ | ---------------------------------------------- |
+| 200    | OK                                             |
+| 4001   | PARAM_ERR 传入的参数值错误，多出现于值类型错误 |
+| -1     | UNKNOWN_ERR 未知错误                           |
+| 5001   | CONNECT_ERR 连接错误，多出现为代理连接异常     |

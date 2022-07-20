@@ -15,7 +15,7 @@ from . import constants
 # Create your views here.
 
 spider_logger = logging.getLogger("spider")
-BAIDU_MAP_AK = os.getenv("BAIDU_MAP_AK")  # 百度地图 access_key
+BAIDU_MAP_COORDS_AK = os.getenv("BAIDU_MAP_COORDS_AK")  # 百度地图经纬度 access_key
 
 
 class LianJiaCitySpiderView(View):
@@ -123,7 +123,7 @@ class EstateAddCoordinateView(View):
      - 用于获取小区表中条目地址对应的坐标，并更新对应条目
     """
     def get(self, request):
-        access_key = BAIDU_MAP_AK
+        access_key = BAIDU_MAP_COORDS_AK
         queryset = v_models.EstateModel.objects.filter(lon=None, lat=None)
         map_tool = BaiduMap(access_key)  # 百度地图工具
 
@@ -147,7 +147,7 @@ class DistrictAddCoordinateView(View):
      - 用于获取辖区表中条目地址对应的坐标，并更新对应条目
     """
     def get(self, request):
-        access_key = BAIDU_MAP_AK
+        access_key = BAIDU_MAP_COORDS_AK
         queryset = v_models.DistrictModel.objects.filter(lon=None, lat=None, parent__isnull=False)  # 去除行政区和有坐标的条目
         map_tool = BaiduMap(access_key)  # 百度地图工具
 
