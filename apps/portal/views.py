@@ -1,4 +1,5 @@
 import json
+import os
 
 from django.shortcuts import render
 from django.views import View
@@ -27,6 +28,8 @@ class HousingPriceDistributionView(View):
     """
 
     def get(self, request):
+        # 百度底图引入 access_key
+        baidu_map_base_ak = os.getenv("BAIDU_MAP_BASE_AK")
         # 序列化热力图相关数据
         estate_queryset = models.EstateModel.objects.all()
         heatmap_list = []  # 小区信息列表
@@ -63,6 +66,7 @@ class HousingPriceDistributionView(View):
         return render(self.request, "portal/distribution.html", context={
             "heatmap_data": json.dumps(heatmap_list),
             "top10_convert": json.dumps(top10_convert),
+            "base_ak": baidu_map_base_ak,
         })
 
 

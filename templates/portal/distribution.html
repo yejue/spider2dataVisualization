@@ -8,7 +8,7 @@
 {% block extra_head %}
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'js/echarts.min.js' %}"></script>
-    <script src="https://api.map.baidu.com/getscript?v=2.0&ak=AHbr47NUKZGwIx8YHAFrGeHMrZLSCYk1"></script>
+    <script src="https://api.map.baidu.com/getscript?v=2.0&ak={{ base_ak }}"></script>
     <script src="{% static 'js/bmap.js' %}"></script>
 
 {% endblock %}
