@@ -458,21 +458,19 @@ python3.10、ubuntu2204
 
 ## 四、功能接口
 
-**注意，四个功能接口请按照顺序使用，才可正确集成数据录入对应的数据表。**
+### 4.1 添加城市数据功能接口
 
-### 4.1 集成添加城市数据功能接口
-使用方法：使用命令 ` python manage.py runserver 0:8000 ` 启动本项目之后，在任意浏览器中访问
-ip:8000/visualization/add_city/ ,然后等待录入结束，页面弹出以下信息即可。
+接口地址：/visualization/add_city/
 
-```python
-{
-    "result_code": "200",
-    "message": "成功",
-    "data": null
-}
-```
-### 4.2 集成添加辖区数据功能接口
-使用方法：使用命令 ` python manage.py runserver 0:8000 ` 启动本项目和上述城市数据录入完毕之后，在任意浏览器中访问 ip:8000/visualization/add_district/ ,然后等待录入结束，页面弹出以下信息即可。
+返回格式：json
+
+请求方式：get
+
+请求示例：/visualization/add_city/
+
+接口备注： 添加城市数据功能接口，访问后等待录入数据即可。
+
+返回参数示例:
 
 ```python
 {
@@ -481,8 +479,18 @@ ip:8000/visualization/add_city/ ,然后等待录入结束，页面弹出以下�
     "data": null
 }
 ```
-### 4.3 集成添加小区数据功能接口
-使用方法：使用命令 ` python manage.py runserver 0:8000 ` 启动本项目和上述辖区数据录入完毕之后，在任意浏览器中访问 ip:8000/visualization/add_estate/ ,然后等待录入结束，页面弹出以下信息即可。
+### 4.2 添加辖区数据功能接口
+接口地址：/visualization/add_district/
+
+返回格式：json
+
+请求方式：get
+
+请求示例：/visualization/add_district/
+
+接口备注： 添加辖区数据功能接口，访问后等待录入数据即可。
+
+返回参数示例:
 
 ```python
 {
@@ -491,8 +499,38 @@ ip:8000/visualization/add_city/ ,然后等待录入结束，页面弹出以下�
     "data": null
 }
 ```
-### 4.4 集成添加房屋信息数据功能接口
-使用方法：使用命令 ` python manage.py runserver 0:8000 `启动本项目和上述小区数据录入完毕之后，在任意浏览器中访问 ip:8000/visualization/add_data/ ,然后等待录入结束，页面弹出以下信息即可。
+### 4.3 添加小区数据功能接口
+接口地址：/visualization/add_estate/
+
+返回格式：json
+
+请求方式：get
+
+请求示例：/visualization/add_estate/
+
+接口备注： 添加小区数据功能接口，访问后等待录入数据即可。
+
+返回参数示例:
+
+```python
+{
+    "result_code": "200",
+    "message": "成功",
+    "data": null
+}
+```
+### 4.4 添加房屋信息数据功能接口
+接口地址：/visualization/add_data/
+
+返回格式：json
+
+请求方式：get
+
+请求示例：/visualization/add_data/
+
+接口备注： 添加小区数据功能接口，访问后等待录入数据即可。
+
+返回参数示例:
 
 ```python
 {
