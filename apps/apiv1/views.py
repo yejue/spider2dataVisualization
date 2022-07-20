@@ -1,41 +1,34 @@
-from rest_framework import viewsets
-from rest_framework.pagination import PageNumberPagination
 from apps.visualization.models import CityModel, HouseInfoModel, DistrictModel, EstateModel
-from apps.apiv1 import serializers
+
+from libs.views import SimpleViewSet
 # Create your views here.
 
 
-class CustomPager(PageNumberPagination):
-    """客制化分页器，默认一个页面至多展示50条"""
-    page_size = 50
-    page_query_param = 'page'
-    max_page_size = 50
+class CitySimpleViewSet(SimpleViewSet):
+    """城市表视图集合"""
+    operation_fields = ["id", "city_name", "subdomain"]
+    model = CityModel
+    base_name = "city_list"
 
 
-class CityViewSet(viewsets.ModelViewSet):
-    """城市表视图集"""
-    serializer_class = serializers.CityModelSerializer
-    queryset = CityModel.objects.all()
-    pagination_class = CustomPager
+class DistrictSimpleViewSet(SimpleViewSet):
+    """辖区表视图集合"""
+    operation_fields = ["id", "city_id", "district_name", "lon", "lat", "avg_price", "house_code", "parent_id"]
+    model = DistrictModel
+    base_name = "district_list"
 
 
-class HouseInfoViewSet(viewsets.ModelViewSet):
-    """房子信息表视图集"""
-    queryset = HouseInfoModel.objects.all()
-    serializer_class = serializers.HouseInfoModelSerializer
-    pagination_class = CustomPager
+class EstateSimpleViewSet(SimpleViewSet):
+    """小区表视图集合"""
+    operation_fields = ["id", "district_id", "estate_name", "lon", "lat", "avg_price", "house_code"]
+    model = EstateModel
+    base_name = "estate_list"
 
 
-class DistrictViewSet(viewsets.ModelViewSet):
-    """辖区表视图集"""
-    queryset = DistrictModel.objects.all()
-    serializer_class = serializers.DistrictModelSerializer
-    pagination_class = CustomPager
-
-
-class EstateViewSet(viewsets.ModelViewSet):
-    """小区表"""
-    queryset = EstateModel.objects.all()
-    serializer_class = serializers.EstateModelSerializer
-    pagination_class = CustomPager
-
+class HouseInfoSimpleViewSet(SimpleViewSet):
+    """房子表视图集合"""
+    operation_fields = [
+        "id", "title", "house_code", "location", "house_type", "house_area", "total_price", "unit_price", "estate_id",
+    ]
+    model = HouseInfoModel
+    base_name = "house_list"
