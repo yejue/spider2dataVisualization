@@ -542,8 +542,18 @@ python3.10、ubuntu2204
 
 
 ##  五、数据集成任务
-pass
-
+1. 获取小区信息命令
+```shell
+$python manage.py get_estates <city_name>
+```
+2. 更新小区坐标命令
+```shell
+$python manage.py get_estate_coords
+```
+3. 更新房子信息命令
+```shell
+$python manage.py get_houses <city_name>
+```
 ## 六、链家二手房爬虫描述
 
 ### 6.1 数据表模型
