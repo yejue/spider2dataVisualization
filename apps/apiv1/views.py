@@ -13,7 +13,7 @@ class CitySimpleViewSet(SimpleViewSet):
 
 class DistrictSimpleViewSet(SimpleViewSet):
     """辖区表视图集合"""
-    operation_fields = ["id", "city_id", "district_name", "lon", "lat", "avg_price", "house_code", "parent_id"]
+    operation_fields = ["id", "city_id", "district_name", "lon", "lat", "parent_id"]
     model = DistrictModel
     base_name = "district_list"
 
